@@ -1,0 +1,188 @@
+{% extends 'osa/_answer.md.jinja' %}
+
+{% set aid = 135 %}
+{% set answers_questions = [ 1031 ] %}
+
+{% block answer %}
+
+{% raw %}
+\newcommand{\rng}[1]{\operatorname{rng}{ #1}}
+{% endraw %}
+
+>
+> ## WORK IN PROGRESS
+>
+
+## Copredictor Definition
+
+Given any discrete random variables $X$ and $Y$, define a _copredictor_ of $Y$
+with $X$ as any random variable $W$ such that
+\begin{align*}
+& \text{$X$ and $W$ are independent and} \\
+& Y = f(X,W) \text{ for some function $f$}
+\end{align*}
+
+## Copredictor Existence
+
+Given any discrete random variables $X$ and $Y$, there exists a
+copredictor $W$.  The range of $W$ is $(\rng{X}) \mapsto (\rng{Y})$, that is
+all functions from the finite range of $X$ to the range of $Y$. Consider any
+$x$, $y$, $w$
+from $\rng{X}$, $\rng{Y}$, and $(\rng{X}) \mapsto (\rng{Y})$ respectively.
+Denote
+\begin{eqnarray*}
+S & = &
+  \{\omega:W(\omega)=w\} \cap \{\omega:X(\omega)=x\} \cap \{\omega:Y(\omega)=y\} \\
+\end{eqnarray*}
+Define $W$ such that
+\begin{eqnarray*}
+\P{S} & = & \; \P{X=x} \! \prod_{x' \in \rng{X}} \P{Y=w(x')|X=x'}
+\end{eqnarray*}
+when $w(x) = y$ otherwise $\P{S} = 0$.
+
+
+**Proof**  TO DO
+
+A Functional Representation Lemma can be found on page 626 of
+[@el_gamal_network_2011] and is a more powerful result beyond
+just existence of a copredictor. A further Strong Functional Representation
+Lemma can be found in [@li_strong_2017].
+
+
+## Optimal Copredictor
+
+Given any copredictor $W$ of $Y$ with $X$, it follows that
+\begin{eqnarray*}
+\H{Y} & = & I(X,W;Y) + H(Y|X,W)  \\
+ & = & I(X,W;Y) + 0  \\
+ & = & I(X;Y) + I(W;Y) - I(X;W;Y)  \\
+ & = & I(X;Y) + I(W;Y) + I(X;W|Y)
+\end{eqnarray*}
+since $I(X;W;Y) + I(X;W|Y) = I(X;Y) = 0$.
+
+We seek a copredictor that maximizes how much predictive information is
+provided 'exclusively' by independent variables $X$ and $W$ and not their
+interaction $I(X;W|Y)$.
+
+To this end we want the minimum $I(X;W|Y)$ across all possible copredictors $W$
+of $Y$ with $X$. This minimum is defined as the _excess functional information_
+in [@li_strong_2017]. In this document, any copredictor achieving this minimum
+is considered an _optimal copredictor_.
+
+The sum of mutual information and excess functional information is the
+conditional entropy of $Y$ given an optimal copredictor $W$ with $X$:
+
+\begin{eqnarray*}
+H(Y|W) & = & I(X;Y|Y) + H(Y|X,W)  \\
+       & = & I(X;Y) - I(X;W;Y) + 0  \\
+       & = & I(X;Y) + I(X;W|Y)  \\
+\end{eqnarray*}
+
+Thus minimizing $I(X;W|Y)$ is equivalent to minimizing $H(Y|W)$.
+The optimal copredictor is also a copredictor that achieves a minimum $H(Y|W)$.
+
+
+## Linear Subspace of Copredictors
+
+Consider any finite discrete random variables $X$ and $Y$.
+Let $F$ denote $(\rng{X}) \mapsto (\rng{Y})$, the set of all functions
+from the range of $X$ to the range of $Y$.
+
+The following linear subspace of copredictors captures all
+of the possible values of $H(Y|W)$ and $I(X;W|Y)$.
+Consider all copredictors $W$ of $Y$ with $X$ where the range of $W$ is $F$,
+and for each $w \in F$, $x \in \rng{X}$, $y \in \rng{Y}$ with
+\begin{eqnarray*}
+S & = & \{\omega:W(\omega)=w\} \cap \{\omega:X(\omega)=x\}
+                               \cap \{\omega:Y(\omega)=y\}
+\end{eqnarray*}
+the following holds
+\begin{eqnarray*}
+\P{S} & = & \begin{cases}
+  \P{Y=y} \P{X=x} & \text{ if } w(x) = y \\
+  0 & \text{ otherwise }
+ \end{cases}
+\end{eqnarray*}
+
+Each possible copredictor $W$ defines a point in the subspace $F \mapsto \mathbb{R}$
+where $q_w := P(W=w)$ is the coordinate along the dimension $w \in F$.
+
+This is the linear subspace of possible $q$ defined by the linear constraints:
+\begin{eqnarray*}
+P(Y=y|X=x) & = &
+  \sum_{\substack{w \in F \\ w(x)=y}} q_w
+\end{eqnarray*}
+for all $y \in \rng{Y}$, and $x \in \rng{X}$ and 
+\begin{eqnarray*}
+q_w & \ge & 0
+\end{eqnarray*}
+for all $w \in F$.
+
+We show that $H(Y|W)$ is a linear function in terms of $q_w$ across $w \in F$.
+Because of this, minimizing $H(Y|W)$ is minimizing a linear objective function
+in the subspace.
+
+For any $w \in F$ and $y \in \rng{Y}$,
+\begin{eqnarray*}
+\P{Y=y|W=w}
+  & = & \frac{\P{Y=y,W=w}}{\P{W=w}}  \\
+  & = & \sum_{x \in \rng{X}} \frac{\P{Y=y,X=x,W=w}}{\P{W=w}}  \\
+  & = & \sum_{\substack{x \in \rng{X} \\ w(x)=y }} \frac{\P{X=x} \P{W=w}}{\P{W=w}}  \\
+  & = & \sum_{\substack{x \in \rng{X} \\ w(x)=y }} \P{X=x}  \\
+  & = & \P{X \in w^{-1}(y)}  \\
+\end{eqnarray*}
+For any $w \in F$ let
+\begin{eqnarray*}
+m(w) & = & \sum_{y \in \rng{Y}} \P{X \in w^{-1}(y)} \lb\frac{1}{\P{X \in w^{-1}(y)}}
+\end{eqnarray*}
+Note that $m(w)$ does not depend on any probabilities $\P{W=w}$ of a specific copredictor $W$.
+The function $m$ only depends on functions $w \in F$.
+Combining the previous results shows that $H(Y|W)$ is a linear objective function.
+\begin{eqnarray*}
+H(Y|W)
+  & = & \sum_{w \in F} P(W=w) \sum_{y \in \rng{Y}} P(Y=y|W=w) \lb\frac{1}{P(Y=y|W=w)}  \\
+  & = & \sum_{w \in F} q_w \, m(w)
+\end{eqnarray*}
+
+
+Any copredictor $Z$ can be simplified such that $H(Y|Z) = H(Y|W)$
+for some $W$ in the above linear subspace.
+For every value $z$ in the range of $Z$,
+it must correspond to some function
+$w \in F = (\rng{X} \mapsto \rng{Y})$ since $H(Y|X,W) = 0$.
+Let $W$ be a random variable with range $F$ such that $P(W=w)$ equals
+the sum of probabilities $\P{Z=z}$ for which $z$ corresponds to $w$.
+
+
+# Linear Optimization
+
+Minimization of the previously identified linear objective function
+within the linear subspace of copredictors is a standard form linear
+programming problem [@cornuejols_optimization_2007].
+It is a primal problem for which a dual problem exists.
+Although the primal problem is an optimization on $|Y|^{|X|}$ variables,
+the dual problem is an optimzation on only $|Y| \cdot |X|$ variables.
+
+In matrix notation, the dual linear program is to maximize $b^T r$ under
+constraint $A^T r \le m$. The resulting maximum $b^T r$ equals the minimum
+possible $H(Y|W)$.
+
+The vector $b$ consists of the values $P(Y=y|X=x)$
+across values $x \in \rng{X}$ and $y \in \rng{Y}$.
+The vector $m$ consists of the values $m(w)$ across $w \in F$.
+The matrix expression $A^T r \le m$ represents the linear constaints
+\begin{eqnarray*}
+\sum_{x \in \rng{X}} r_{(x,w(x))}  \le m(w)
+\end{eqnarray*}
+across all $w \in F$.
+The maximized $b^T r$ represents
+\begin{eqnarray*}
+\sum_{\substack{x \in \rng{X} \\ y \in \rng{Y}}} \P{Y=y|X=x} \, r_{(x,y)}
+\end{eqnarray*}
+and will equal the minimum possible $H(Y|W)$ across all copredictors $W$.
+
+
+# References
+
+{% endblock answer %}
+

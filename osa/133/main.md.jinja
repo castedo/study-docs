@@ -1,0 +1,54 @@
+{% extends 'osa/_answer.md.jinja' %}
+{% set aid = 133 %}
+{% set answers_questions = [ 1029 ] %}
+
+{% block answer %}
+
+>
+> ## WORK IN PROGRESS
+>
+
+## Scope product
+
+\begin{eqnarray*}
+\pi \times \rho & := & \{ A \cap B : A \in \pi, B \in \rho \}  \\
+\pi \times B & := & \{ A \cap B : A \in \pi \}  \\
+\end{eqnarray*}
+
+Consider any two scopes $\theta$ and $\phi$ sharing probability space $\Omega$.
+Define
+\begin{eqnarray*}
+\theta \times \phi & := &
+  \bigcup_{i=0}^\infty
+    \bigcup_{\substack{\pi \in \sps{\theta}{i} \\
+                       \rho \in \sps{\phi}{i} \\
+                       (\selfcup{\pi}) \cap (\selfcup{\rho}) \not= \emptyset }}
+      \mathcal{C}(\pi, \rho)
+\end{eqnarray*}
+where
+\begin{eqnarray*}
+\mathcal{C}(\pi, \rho) & = & \begin{cases}
+  \{ (\pi \times \rho) \mapsto \theta(\pi) \}
+    & \text{ when } \theta(\pi) = \phi(\rho)  \\
+  \left\{ \pi \mapsto \theta(\pi) \right\} \cup
+    \bigcup_{A \in \pi} \left\{ \rho \times A \mapsto \phi(\rho) \right\} 
+    & \text{ when } \theta(\pi) > \phi(\rho)  \\
+  \left\{ \rho \mapsto \phi(\rho) \right\} \cup
+    \bigcup_{A \in \rho} \left\{ \pi \times A \mapsto \theta(\pi) \right\} 
+    & \text{ when } \theta(\pi) < \phi(\rho)  \\
+  \end{cases}  \\
+\end{eqnarray*}
+
+#### Theorem (Scope product is a scope of relevance)
+
+For any two scopes of relevance $\theta$ and $\phi$ sharing probability space
+$\Omega$, $\theta \times \phi$ is also a scope of relevance.
+
+**Proof**
+
+TBD 
+
+# References
+
+{% endblock answer %}
+

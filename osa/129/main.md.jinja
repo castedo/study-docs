@@ -1,0 +1,47 @@
+{% extends 'osa/_answer.md.jinja' %}
+{% set aid = 129 %}
+{% set answers_questions = [ 1026 ] %}
+{% set title = "Entropy Scope of Relevance" %}
+
+{% block answer %}
+
+Let $\dom{f}$ denote the domain of a function $f$.
+Given $\pi$ a set of sets, let $\selfcup{\pi}$ denote the union of all member
+sets in $\pi$. When $\pi$ is a partition, $\pi$ covers $\selfcup{\pi}$.
+
+In a _scope of relevance_, partitions represent questions with each member
+set (part) an answer. Each answer represents an event of a probability space.
+
+Given a function over partitions of events of probability space $\Omega$,
+define levels of the domain:
+
+\begin{eqnarray*}
+\sps{\theta}{0} & := &
+  \{ \pi \in \dom{\theta} : \selfcup{\pi} = \Omega \}  \\
+\sps{\theta}{i+1} & := & \left\{ \pi \in \dom{\theta} :
+  \selfcup{\pi} \in \rho, \rho \in \sps{\theta}{i}
+  , \pi \not\in \sps{\theta}{i}  \right\}  \\
+\end{eqnarray*}
+
+A _scope of relevance_ $\theta$ is a non-negative real-valued function
+over partitions of events (subsets) of a probability space $\Omega$
+with the following conditions:
+
+1. At most one partition can cover any event.
+   Formally, $\selfcup{\pi} = \selfcup{\rho}$ implies $\pi = \rho$
+   for any partitions $\pi$ and $\rho$ in $\dom{\theta}$.
+2. $\dom{\theta} = \bigcup_{i=0}^\infty \sps{\theta}{i}$
+{# 3. Every partition has finitely many member sets (parts). #}
+
+The domain of a scope of relevance is all relevant questions.
+Each real value assigned to a question is a degree of relevance.
+The second condition in the definition means the partitions (questions)
+are dividing the probability space $\Omega$ in a nested hierarchical manner.
+Or in other words, either the event of all outcomes ($\Omega$) or the event of
+an answer to a question is the event under which another question can be asked.
+
+
+# References
+
+{% endblock answer %}
+

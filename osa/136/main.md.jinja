@@ -1,0 +1,165 @@
+{% extends 'osa/_answer.md.jinja' %}
+
+{% set aid = 136 %}
+{% set answers_questions = [ 1033 ] %}
+
+{% block answer %}
+
+The name $F_{ST}$ was used as early as [@wright_genetical_1949] for a certain
+measure between populations. In the many decades since, the name has been
+used to have slightly different meanings. The recent publication
+[@bhatia_estimating_2013] covers a long list of different $F_{ST}$ meanings in
+many papers over the decades.
+Most of the papers cover additional concepts which are not required to define
+and gain intuition on $F_{ST}$. And the mathematical details behind a formal
+definition are spread across many papers.
+
+This documents gives a simple formal definition to $F_{ST}$, equivalent to
+[@bhatia_estimating_2013] and [@patterson_notes_nodate]. This simple definition
+also makes clear how $F_{ST}$ is precisely a ratio of variances.
+
+## The Definition
+
+Random variables $A_S$, $A_T$ and $D$ model uncertainty for $F_{ST}$:
+
+* $A_S$ and $A_T$ for the allele found in a random gamete
+ from the "**S**ub-population" and "**T**op" population, respectively
+* $D$ for the random **d**ecent, **d**rift, or **d**ivergence
+ of the "sub-population" from the "top" population
+
+"Top" population can mean ancestral population (as in
+[@bhatia_estimating_2013]), or it can mean "total" population
+(the original meaning in [@wright_genetical_1949]).
+
+Given assumptions
+
+* $A_S$ and $A_T$ take values of $0$ or $1$
+* $A_T$ and $D$ are independent
+* $\E{A_S} = \E{A_T}$
+
+the definition follows
+
+\begin{eqnarray*}
+F_{ST} & := & \frac{ \Var{\E{A_S|D}} }{ \Var{A_T} }
+\end{eqnarray*}
+
+## Convenient Expectations
+
+Conveniently, expectations of allele variables are allele frequencies.
+The following variable definition will be convenient
+\begin{eqnarray*}
+p & := & \E{A_T}
+\end{eqnarray*}
+
+Due to the assumptions of $F_{ST}$ the following are conveniently true
+\begin{align*}
+p &= \E{A_S}  &  p &= \E{A_T^2}  \\
+\E{A_S} &= \E{A_S^2}  &  \E{A_S|D} &= \E{A_S^2|D}  \\
+\end{align*}
+and
+$$
+\Var{A_T} = \E{A_T^2} - \E{A_T}^2 = p - p^2  =  p(1-p)
+$$
+
+
+
+## $F_{ST}$ as variance explained or uncertainty reduced
+
+In light of the following theorem, $F_{ST}$ can be interpreted as allele
+variance explained by random descent/drift/divergence.  Alternatively, an
+interpretation can also be allele uncertainty reduced by knowing
+descent/drift/divergence.
+
+**Theorem 1**
+
+\begin{eqnarray*}
+\Var{A_T} & = & \Var{\E{A_S|D}} + \E{\Var{A_S|D}}
+\end{eqnarray*}
+
+**Proof**
+
+\begin{eqnarray*}
+\Var{\E{A_S|D}}
+  & = & \E{\E{A_S|D}^2} - \E{\E{A_S|D}}^2   \\
+  & = & \E{\E{A_S|D}^2} - p^2   \\
+\E{\Var{A_S|D}}
+  & = & \E{ \E{A_S^2|D} - \E{A_S|D}^2 }  \\
+  & = & p - \E{\E{A_S|D}^2}  \\
+\end{eqnarray*}
+
+
+## Unbiased Estimators
+
+Consider observing two independent random descents/drifts/divergences $D_1$
+and $D_2$ under the assumptions for $D$ of $F_{ST}$.
+Furthermore, for each $j \in \{1, 2 \}$,
+consider observing $n_j$ independent random gametes within each resulting
+sub-population. Define $n_1 + n_2$ independent observed alleles $A_{S,j,i}$
+with $i$ indexing sampled gametes within each sampled sub-populations resulting
+from the independent descents/drifts/divergences. For convenience define the
+following:
+\begin{align*}
+\hat{p}_1 & := \frac{1}{n_1} \sum_{i=1}^{n_1} A_{S,1,i}  &
+\hat{p}_2 & := \frac{1}{n_2} \sum_{i=1}^{n_2} A_{S,2,i}
+\end{align*}
+
+The "Hudson" estimator of $F_{ST}$ is defined in [@bhatia_estimating_2013]
+as 
+$$
+\frac{
+  (\hat{p}_1 - \hat{p}_2)^2
+   - \frac{\hat{p}_1 (1 - \hat{p}_1)}{n_1-1}
+   - \frac{\hat{p}_2 (1 - \hat{p}_2)}{n_2-1}
+}{
+  \hat{p}_1 (1-\hat{p}_2) + \hat{p}_2 (1-\hat{p}_1)
+}
+$$
+
+We first show that the denominator is an unbiased estimator of
+$2 \Var{A_T}$.
+With $\hat{p}_1$ and $\hat{p}_1$ independent it follows:
+
+\begin{eqnarray*}
+\E{ \hat{p}_1 (1-\hat{p}_2) + \hat{p}_2 (1-\hat{p}_1) }
+  & = & \E{\hat{p}_1} \E{1-\hat{p}_2} + \E{\hat{p}_2} \E{1-\hat{p}_1}  \\
+  & = & 2 p (1-p)  \\
+  & = & 2 \Var{A_T}
+\end{eqnarray*}
+
+We now show the "Hudson" numerator is an unbiased estimator of
+$2 \Var{\E{A_S|D}}$. For each $j \in \{0,1\}$ define:
+\begin{eqnarray*}
+\hat{v}_j
+  & := & \frac{1}{n_j-1} \sum_{i=1}^{n_j} (A_{S,j,i} - \hat{p}_i)^2  \\
+\end{eqnarray*}
+It follows as a classic unbiased estimator of variance
+[@degroot_probability_2002] that:
+\begin{eqnarray*}
+\E{ \hat{v}_j } & = & \E{\Var{A_S|D_1}}  \\
+\end{eqnarray*}
+Since $\E{\Var{A_S|D}} = \Var{A_T} - \E{\Var{A_S|D}}$, it follows
+that an unbiased estimator of $2 \Var{\E{A_S|D}}$ is
+$$
+  \hat{p}_1 (1-\hat{p}_2) + \hat{p}_2 (1-\hat{p}_1) - \hat{v}_1 - \hat{v}_2 
+$$
+We now show this is equivalent to the "Hudson" numerator.
+Note that
+\begin{eqnarray*}
+\hat{p}_1 (1-\hat{p}_2) + \hat{p}_2 (1-\hat{p}_1)
+  & = & \hat{p}_1 + \hat{p}_2 - 2 \hat{p}_1 \hat{p}_2  \\
+\hat{v}_i & = & \hat{p}_i - \hat{p}_i^2 + \frac{\hat{p}_i (1 - \hat{p}_i)}{n_i-1}  \\
+(\hat{p}_1 - \hat{p}_2)^2  & = & \hat{p}_1^2 + \hat{p}_2^2 - 2 \hat{p}_1 \hat{p}_2  \\
+\end{eqnarray*}
+it follows that
+\begin{eqnarray*}
+\hat{p}_1 (1-\hat{p}_2) + \hat{p}_2 (1-\hat{p}_1) - \hat{v}_1 - \hat{v}_2
+  & = & (\hat{p}_1 - \hat{p}_2)^2 - \frac{\hat{p}_1 (1 - \hat{p}_1)}{n_1-1} - \frac{\hat{p}_2 (1 - \hat{p}_2)}{n_2-1}  \\
+\end{eqnarray*}
+which is the numerator in the "Hudson" estimator in [@bhatia_estimating_2013].
+
+
+
+# References
+
+{% endblock answer %}
+

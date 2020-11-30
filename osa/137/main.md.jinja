@@ -1,0 +1,130 @@
+{% extends 'osa/_answer.md.jinja' %}
+
+{% set aid = 137 %}
+{% set answers_questions = [1034] %}
+
+{% block answer %}
+
+{% raw %}
+\newcommand{\Htwo}[1]{\operatorname{H}_2({ #1})}
+{% endraw %}
+
+Both variance and entropy are measures of uncertainty.
+Variance assumes values vary as points in a space with distances between.
+In this document, the variance of a random vector refers to the
+variance of the distance from its mean
+(sum of the variances of each component).
+
+Random [one-hot](https://en.wikipedia.org/wiki/One-hot) vectors are a
+convenient spacial representation for categorical random variables.
+A [one-hot](https://en.wikipedia.org/wiki/One-hot) vector has 
+all components equal to $0$ except one component that equals $1$.
+This representation has been used in genetics [@menozzi_synthetic_1978].
+For genetic loci with only two alleles, a one-hot vector has two redundant
+components. "Half" of such one-hot vectors are typically used in genetics (e.g.
+  [@weir_genetic_1996] p.40,
+  [@weir_estimating_2002],
+  [@patterson_population_2006]
+).
+The variance of the "half one-hot vector" is exactly half the variance of its
+full one-hot vector.
+
+### Main Result
+
+Given $N$ independent random one-hot vectors: $X_1$, $X_2$, ..., $X_N$ denote
+\begin{eqnarray*}
+X_* = X_1 \times X_2 \times \dots \times X_N
+\end{eqnarray*}
+as the Cartesian product.
+
+The variance of $X_*$ can be adjusted to form a lower bound to the collision
+entropy, $\operatorname{H}_2(X_*)$, and Shannon entropy, $\operatorname{H}(X_*)$:
+$$
+-N \lb{\left( 1 - \frac{ \Var{X_*} }{N} \right)}
+  \; \le \; \operatorname{H}_2(X_*)
+  \; \le \; \H{X_*}
+$$
+
+If every $X_i$ takes only two equally likely values, then the lower bounds reach equality:
+$$
+ -N \lb{\left( 1 - \frac{ \Var{X_*} }{N} \right)} = \Htwo{X_*} = \H{X_*} = N
+$$
+
+### Proof
+
+Let $M_i$ be length of $X_i$ (the number of categorical values represented by
+$X_i$).  Let $p_{i,j}$ represent the probability of $X_i$ taking the $j$-th
+categorical value.
+
+For every $1 \le i \le N$,
+\begin{eqnarray*}
+\sum_{j=1}^{M_i} p_{i,j} = 1
+\end{eqnarray*}
+
+The expectation and variance of the $i$-th one-hot vector $X_i$ is
+\begin{eqnarray*}
+\E{X_i} & = & \left(\; {p}_{i,1} \;,\; {p}_{i,2} \;,\; \dots \;,\; {p}_{i,M_i} \;\right) \\
+\Var{X_i}
+  & = & \sum_{j=1}^{M_i} p_{i,j} \left[ (1 - p_{i,j})^2 + \sum_{k \not= j} (0 - p_{i,k})^2 \right] \\
+  & = & \sum_{j=1}^{M_i} p_{i,j} \left[ 1 - 2 p_{i,j} + \sum_{k=1}^{M_i} p_{i,k}^2 \right] \\
+  & = & 1 - 2 \sum_{j=1}^{M_i} p_{i,j}^2 + \sum_{k=1}^{M_i} p_{i,k}^2  \\
+  & = & 1 - \sum_{j=1}^{M_i} p_{i,j}^2
+\end{eqnarray*}
+
+Thus the variance of $X_i$ equals the probability of two independent
+samples from $X_i$ being distinct. This probability of distinction has been
+called logical entropy [@ellerman_logical_2017].
+
+The complement
+$$
+1 - \Var{X_i} = \sum_{j=1}^{M_i} p_{i,j}^2
+$$
+is the chance of repetition, which is expected probability. Taking the negative
+log gives [Rényi entropy](https://en.wikipedia.org/wiki/R%C3%A9nyi_entropy) of
+order 2, also called collision entropy:
+$$
+-\lb{( 1 - \Var{X_i})}
+  = -\lb{\left( \sum_{j=1}^{M_i} p_{i,j}^2 \right)}
+  = \operatorname{H}_2(X_i)
+$$
+Since negative log is a concave function, the negative log of expected
+probability (collision entropy), is a lower bound to the expected negative log
+of probability (Shannon entropy) by [Jensen's
+inequality](https://en.wikipedia.org/wiki/Jensen%27s_inequality):
+$$
+\operatorname{H}_2(X_i)
+  = -\lb{\left( \sum_{j=1}^{M_i} p_{i,j}^2 \right)}
+  \le \sum_{j=1}^{M_i} p_{i,j} (-\lb{p_{i,j}})
+  = \H{X_i}
+$$
+
+The total variance, can be adjusted to equal the average probability
+of one-hot vector repetition (per one-hot vector):
+$$
+1 - \frac{ \Var{X_*} }{N}
+ = 1 - \frac{1}{N} \sum_{i=1}^N \Var{X_i}
+ = \frac{1}{N} \sum_{i=1}^N \sum_{j=1}^{M_i} p_{i,j}^2
+$$
+
+Negative log with [Jensen's
+inequality](https://en.wikipedia.org/wiki/Jensen%27s_inequality)
+can then establish yet another lower bound:
+$$
+-\lb{\left( \frac{1}{N} \sum_{i=1}^N \sum_{j=1}^{M_i} p_{i,j}^2 \right)}
+  \le \frac{1}{N} \sum_{i=1}^N \left( -\lb{\sum_{j=1}^{M_i} p_{i,j}^2} \right)
+  = \frac{1}{N} \sum_{i=1}^N \operatorname{H}_2(X_i)
+$$
+
+Collision and Shannon entropy are additive for independent variables. Putting
+everything together we get:
+$$
+-N \lb{\left( 1 - \frac{ \Var{X_*} }{N} \right)}
+  \; \le \; \operatorname{H}_2(X_*)
+  \; \le \; \H{X_*}
+$$
+
+
+# References
+
+{% endblock answer %}
+

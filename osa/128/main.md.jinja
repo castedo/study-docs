@@ -1,0 +1,136 @@
+{% extends 'osa/_answer.md.jinja' %}
+{% set aid = 128 %}
+{% set answers_questions = [ 1025 ] %}
+{% set title = "Scoped Entropy" %}
+
+{% block answer %}
+
+{% raw %}
+\renewcommand{\U}[2]{\operatorname{U}_{ #1}(#2)}
+{% endraw %}
+
+>
+> ## WORKING DRAFT
+>
+
+Both variance and entropy are measures of uncertainty and thus information.
+_Scoped entropy_ is a generalization of both statistical variance and Shannon
+entropy [@shannon_mathematical_1998]. It jointly generalizes by using a
+construct of "{{alink('scope of relevance', 129)}}".
+_Scoped_ entropy can be appiled to both discrete and continuous variables.
+
+A _random object_ is a function with a domain of a probability space
+[@ash_probability_2000].  When the function values are real numbers, it is a
+_random variable_ (also called _real random object_ in this document).
+In this document, a _finite random object_ means a random object that takes on
+finitely many values. Or in other words, the range of a _finite random object_
+is a set of finite size.
+
+Both entropy and variance are functions of random objects.
+In the case of Shannon entropy, the random object is finite (with values often
+referred to as symbols).
+In the case of variance, the random object is a (real) random variable.
+The distances between values of a finite random variable affect variance, but
+not Shannon entropy.
+
+Given a scope of relevance $\theta$ and a finite or real random object $X$,
+scoped entropy is denoted as the function
+$$
+ \W{\theta}{X}
+$$
+
+There is a _unirelevant decomposition_ function $\mathfrak{h}$ which given any
+finite random object $X$ generates a scope $\mathfrak{h}(X)$ such that
+\begin{eqnarray*}
+  \W{\mathfrak{h}(X)}{X} & = & \H{X}  \\
+\end{eqnarray*}
+where $\H{X}$ is Shannon entropy.
+
+Similarly, there is a _distribution decomposition_ function $\mathfrak{d}$
+which given any random variable $X$ generates a scope $\mathfrak{d}(X)$ such that
+\begin{eqnarray*}
+  \W{\mathfrak{d}(X)}{X} & = & \Var{X}  \\
+\end{eqnarray*}
+
+
+## Scoped Entropy
+
+Given $\theta$, a  {{alink('scope of relevance', 129)}}, let:
+
+\begin{eqnarray*}
+\mathcal{A}_\theta(0)  & := & \{ \Omega \}  \\
+\mathcal{A}_\theta(i+1) & := & \left\{
+  A \cap B : A \in \mathcal{A}_\theta(i),
+             B \in \pi, \pi \in \sps{\theta}{i} \right\}  \\
+h(A|B) & := & \P{A|B} \lb\frac{1}{\P{A|B}}  \\
+\U{\pi}{Q} & := &
+  \P{\selfcup{\pi}|Q} \sum_{S \in \pi}  h(S|\selfcup{\pi} \cap Q)  \\
+\U{\theta}{Q} & := &
+  \sum^\infty_{i = 0}
+    \sum_{A \in \mathcal{A}_\theta(i)} \P{A|Q}
+      \sum_{\pi \in \sps{\theta}{i}} \theta(\pi) \U{\pi}{A \cap Q} \\
+\U{\theta}{\pi} & := &
+  \sup \left\{
+    \sum_{Q \in \rho} \P{Q} \U{\theta}{Q}
+    : \text{ finite partition } \rho
+           \underset{\text{(or equal to)}}{\text{ coarser than }} \pi
+  \right\}  \\
+\W{\theta}{Q} & := & \U{\theta}{\Omega} - \U{\theta}{Q}  \\
+\W{\theta}{\pi} & := & \U{\theta}{\{\Omega\}} - \U{\theta}{\pi}  \\
+\ker{X} & := & \left\{
+  \{ \omega \in \Omega : X(\omega)=v \} : v \text{ in the range of } X
+ \right\} \\
+\U{\theta}{X} & := & \U{\theta}{\ker{X}}  \\
+\W{\theta}{X} & := & \W{\theta}{\ker{X}}  \\
+\end{eqnarray*}
+
+
+## Shannon Entropy Equality 
+
+Given any finite random object $X$, a _unirelevant decomposition_ is the
+trivial mapping of $X$ to a scope $\theta$ assigning $1$ to a single partition
+consisting of the events for each value taken by $X$:
+\begin{eqnarray*}
+\dom{\theta} & = & \{\ker{X}\}  \\
+\theta(\ker{X}) & = & 1  \\
+\end{eqnarray*}
+
+### Theorem: Unirelevant Scoped Entropy equals Shannon Entropy
+
+Given any finite random objects $X$ and $Y$ and scope $\theta$
+equal to the _unirelevant decomposition_ of $X$,
+\begin{eqnarray*}
+ \U{\theta}{Y} & = & \H{X|Y}  \\
+\end{eqnarray*}
+It follows as a corollary that
+\begin{eqnarray*}
+\W{\theta}{X} & = & \H{X}  \\
+\end{eqnarray*}
+
+
+**Proof**
+
+Consider any single partition scope $\theta = \{\pi \mapsto 1 \}$.
+Both $\mathcal{A}_\theta(i)$ and $\sps{\theta}{i}$ are only non-empty
+at $i=0$ and equal $\{\Omega\}$ and $\{\pi\}$ respectively. Thus by definition
+\begin{eqnarray*}
+\U{\theta}{Y} & = &
+  \sum_{Q \in \ker{Y}} \P{Q}
+  \P{\Omega|Q} \theta(\pi) \P{\selfcup{\pi}|\Omega,Q} 
+      \sum_{B \in \pi}  h(B|\selfcup{\pi},\Omega,Q)  \\
+& = & \sum_{Q \in \ker{Y}} \P{Q} \sum_{B \in \pi}  h(B|Q)  \\
+& = & \sum_{Q \in \ker{Y}} \sum_{B \in \pi} \P{Q \cap B} \lb\frac{1}{\P{B|Q}}  \\
+& = & \H{X|Q}  \\
+\end{eqnarray*}
+Proof of the corollary is:
+$$
+ \W{\theta}{X} = \U{\theta}{\Omega} - \U{\theta}{X}
+               = \H{X|\{\Omega\}} - \H{X|X} = \H{X}
+$$
+
+
+
+# References
+
+{% endblock answer %}
+
