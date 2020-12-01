@@ -1,0 +1,226 @@
+{% extends 'osa/_answer.md.jinja' %}
+{% set aid = 138 %}
+{% set answers_questions = [1035] %}
+{% set title = "Variance estimation of a Bernoulli distribution" %}
+
+{% block answer %}
+
+{% raw %}
+\newcommand{\Es}[1]{\operatorname{E}\!\left[{ #1}\right]}
+{% endraw %}
+
+
+# Introduction
+
+A popular statistical calculation for
+[variance](https://en.wikipedia.org/wiki/Variance)
+is an unbiased [estimator](https://en.wikipedia.org/wiki/Estimator)
+often called 'sample variance'.
+"The feeling that an unbiased estimator should be preferred to a biased
+estimator is prevalent in current statistical practice."
+[@degroot_probability_2002]
+Popular software, such as Excel, the Python `statistics` package and the R language,
+offer prominent functions named `variance` or `var` which default to
+calculating 'sample variance'.
+
+This document evaluates the use of this unbiased estimator for the variance of 
+the simplest and most basic distribution: [the Bernoulli
+distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution).
+Many other distributions can be derived from the Bernoulli
+distribution, and these results likely extend to many of those cases.
+
+The conclusion is there is little justification, at least in the case of a
+Bernoulli distribution, to seek an unbiased estimator when estimating 
+variance.  The simple the definition of variance is
+preferable, if not equally good, compared to 'sample variance'. It's worth
+noting that the definition of variance is also the Maximum Likelihood Estimator
+(MLE) for a Bernoulli distribution.  This document will refer to the simple
+definition of variance as the MLE.
+
+# A bias against bias
+
+A binary categorization of estimators, such as 'biased' vs 'unbiased',
+benefits from simplicity, understandability and ease of communication.
+"The very terminology of the theory of unbiased estimation seems to make the
+use of unbiased estimators highly desirable."
+[@degroot_probability_2002]
+Clearly 'biased' does not _sound_ good. But is the property of an estimator,
+independent of its negative label, _actually_ undesirable.
+Is this an instance of a phenomenon referenced by [a popular paraphrasing of H.
+L. Mencken](https://en.wikiquote.org/wiki/H._L._Mencken)?
+
+> For every complex problem there is an answer that is clear, simple, and wrong.
+
+We consider a parable that is analogous to choosing estimators.
+
+## A 'biased' bus
+
+{% if HTML %}
+![](static/bus.svg){style="width:25%;float:right;margin-left:32px"}
+{% endif %}
+
+Imagine a commuter debating between two buses. Both buses will pass the
+commuter's destination after 40 blocks.
+
+Bus A)
+: Unfortunately, the driver of bus A is unreliable and easily distracted.
+Bus A stops one block short (39 blocks) 90% of the time and 9 blocks too far
+(49 blocks) 10% of the time.
+The **expected** (**average**) travel distance on Bus A is 40 blocks.
+
+Bus B)
+: Bus B always stops after 39 blocks.
+
+Applying terms from statistics, bus B is the 'biased' bus because it
+systematically stops one block too soon. Bus A on the other hand is the
+'unbiased' bus because the expected travel distance is 40 blocks.
+
+Which bus should the commuter take? The commuter could follow the rule that
+'unbiased' buses are preferable to 'biased' buses.
+
+## Better measures of desirability
+
+The fundamental problem with choosing the 'unbiased' bus A is that the two
+possible distances cancel each other out to zero difference from the desirable
+distance of 40 blocks. A more rational approach would be
+evaluate the expectation of all possible distances under a [loss
+function](https://en.wikipedia.org/wiki/Loss_function), not the
+raw distances.
+
+A very common choice with extremely convenient mathematical properties
+is [Mean Squared Error](https://en.wikipedia.org/wiki/Mean_squared_error)
+(MSE).
+
+In addition to MSE, this document will also look at the loss function which
+assigns estimates to $0$ if it is a possible
+[estimand](https://en.wikipedia.org/wiki/Estimand) or $1$ if it is an
+impossible estimand.
+For lack of a knowning an existing
+[TLA](https://en.wikipedia.org/wiki/Three-letter_acronym), this document will
+label the expectation of this loss function the Probability of Impossible Estimand
+(PIE).
+
+# Bernoulli distribution
+
+We now switch to an actual mathematical example rather than an illustrative
+parable.
+Consider data generating process by a Bernoulli distribution with probability
+$p$.  The variance of the process is $p (1-p)$.
+
+The Maximum Likelihood Estimator (often called 'population variance') is
+$$
+M = \frac{1}{n}
+\sum_{j=1}^n \left( X_i - \frac{1}{n} \sum_{j=1}^n X_j \right)^2
+$$
+where $X_i$ are independent samples of data generated from the distribution.
+
+Some writers choose language such as "systematically underestimating the true
+variance" when describing the MLE.
+A well established result for any $p$ is the expected value of the MLE
+$$
+\Es{M} = \frac{n-1}{n} p (1-p)
+$$
+
+By multiplying the MLE by $\frac{n}{n-1}$ we get what is often called
+the 'sample variance' and it is an unbiased estimator.
+
+We now perform simulations to compare the performance of these two
+estimators.
+
+{% if HTML %}
+Simulation code is in a Jupyter notebook "biased_estimator" :
+[[as HTML](biased_estimator.html)]
+[[as .ipynb file](biased_estimator.ipynb)]
+{% endif %}
+
+### Estimating when $p = 0.5$
+
+Consider the distribution of simulated estimates for n = 32 and $p = 0.5$:
+
+<p> ![](ipynb_export/mle_p_half.png) </p>
+
+The true variance to be estimated is
+$$
+p (1-p) = 0.5 \cdot (1-0.5) = 0.25
+$$
+
+The sample variance is as follows:
+
+<p> ![](ipynb_export/unbiased_p_half.png) </p>
+
+At first glance it might seem the unbiased is preferable. But consider
+that the range of possible estimands is $[0, 0.25]$. Even before observing
+one single data point, we know that the variance to be estimated can
+not be greater than $0.25$.
+
+{#
+The only estimates that are **actual possible** values for the variance must
+fall in the range $[0, 1/4]$. Any estimates greater than $1/4$ is known to
+not possibly be the value of the variance.
+#}
+
+In fact, in the specific case of $p = 0.5$ we should fully expect all
+estimates to be equal or less than the estimand and none greater than.
+Using the metrics of PIE, we see that the biased estimator has PIE equal
+to zero (good) and the unbiased estimator has PIE significantly greater
+than zero (bad).
+
+A third estimator with zero PIE can be achieved by taking the minimum of $0.25$
+and the unbiased estimator. But this will no longer be an unbiased estimator.
+It is clearly better at estimating $p$ than the unbiased estimator. But is
+it better than the MLE?
+
+For distributions with $p$ near $0.5$ the unbiased estimator
+makes an irrational trade off of choosing impossible
+values of variance so that the error is zero *on average*. It is a similar
+trade-off to choosing the 'unbiased' bus over the 'biased' bus so as to
+have a result that is *on average* the desired value.
+
+
+### PIE performance across all $p$
+
+We now consider PIE across all possible values of $p$. For the biased MLE,
+it is always zero. For the unbiased sample variance it depends on $p$ and
+the numbers of samples $n$. Here are simulations that summarize the trend:
+
+<p> ![](ipynb_export/unbiased_pie.png) </p>
+
+We see high PIE for all distributions with $p$ near $0.5$. For lower
+numbers of samples $n$, notable PIE values expand into most of the range
+of possible distributions.
+
+### Overall performance across all $p$
+
+We finish looking at the performance in both PIE and MSE of both
+estimators. First we look MSE and average error (bias) for both sample variance
+and the MLE for $n=5$:
+
+<p> ![](ipynb_export/perf5.png) </p>
+
+We see that MSE is generally *smaller* with the MLE than sample variance for
+small sample sizes. So although the sample variance maintains an average error
+around zero, it does so at the cost of worse overall performance when evaluating
+MSE.
+
+For a sample size of $n=20$ the line of PIE is added as a black line:
+
+<p> ![](ipynb_export/perf20.png) </p>
+
+Here we see that for low values of $p$ the MLE has better MSE than sample
+variance. For higher values of $p$, sample variance does achieve improved
+MSE but it does so at the cost of significantly increased PIE.
+
+> There ain't no such thing as a free lunch.
+
+# Conclusion
+
+When evaluated _as an estimator_ for a Bernoulli distribution, the sample
+variance is not more desirable than the MLE. In fact, when evaluated in the
+context of two loss functions, MSE and PIE, the MLE is actually _more_
+desirable despite its inclusion in a category of estimators labeled as 'biased'.
+
+
+# References
+
+{% endblock answer %}
+
