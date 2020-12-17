@@ -1,0 +1,372 @@
+{% extends 'osa/_answer.md.jinja' %}
+{% set aid = 139 %}
+{% set answers_questions = [1036] %}
+{% set title = "Sample vs population variance in multivariate distributions" %}
+
+{% block answer %}
+
+{% raw %}
+\newcommand{\MSE}[1]{\operatorname{MSE}\!\left[{ #1}\right]}
+{% endraw %}
+
+>
+> ## WORK IN PROGRESS
+>
+
+# Introduction
+
+On a normal distribution, sample variance does not perform better than
+population variance, as a point estimator, evaluated by Mean Squared Error
+(MSE).  Similarly, on a Bernoulli distribution, sample variance {{alink('does
+not perform better than population variance ', 138)}} as a point estimator,
+evaluated by MSE and Probability of Impossible Estimand [@castedo_osa_138].
+
+However, the underperformance of sample variance in one variable does not
+extend to the sum of variances of a multivariate distribution.
+In fact, when there are many more variables than samples, sample variance
+can perform significantly better than population variance as a point estimator.
+
+# When does sample variance beat population variance
+
+Given an estimator $F$ of parameter $\theta$ of a specific distribution, the
+MSE can be decomposed into estimator variance plus bias squared:
+[@degroot_probability_2002]:
+\begin{eqnarray*}
+\MSE{F} & = & \Vars{F} + \Es{F - \theta}^2
+\end{eqnarray*}
+
+If the bias is exactly
+\begin{eqnarray*}
+  \Es{F - \theta} & = & - \frac{1}{n} \theta
+\end{eqnarray*}
+for some $n$, then unbiased estimator
+$$
+\frac{n}{n-1} F
+$$
+is a better point estimator than $F$, as measured by MSE, if and
+only if,
+\begin{eqnarray*}
+\frac{\Es{F}^2}{\Vars{F}} & > & 2n-1
+\end{eqnarray*}
+
+Intuitively, if average estimates from $F$ are large relative to estimator
+variance, then the unbiased estimator attains lower MSE. But if estimator
+variance is large relative to average estimates, then the unbiased estimator
+has higher MSE.
+
+A proof is provided in the proof section.
+
+For $F$ as population variance of $n$ samples (independent and identically
+distributed), the condition of
+\begin{eqnarray*}
+  \Es{F - \theta} & = & - \frac{1}{n} \theta
+\end{eqnarray*}
+is always true no matter from what distribution the samples are drawn
+[@degroot_probability_2002].
+
+
+## Normal distributions
+
+Consider $F$ as population variance of $n$ samples from a normal distribution with
+variance $\sigma^2$.
+$nF / \sigma^2$ has a chi-squared distribution with $n-1$ degrees of freedom
+[@degroot_probability_2002] and thus:
+\begin{eqnarray*}
+\Es{n F / \sigma^2} & = & n-1 \\
+\Es{F} & = & \frac{n-1}{n \sigma^2}  \\
+\Vars{n F / \sigma^2} & = & 2(n-1) \\
+\Vars{F} & = & \frac{2(n-1)}{n^2 \sigma^4} \\
+\frac{\Es{F}^2}{\Vars{F}} & = & \frac{n-1}{2} \\
+\frac{\Es{F}^2}{\Vars{F}} & < & 2 n - 1\\
+\end{eqnarray*}
+
+Thus for the normal distribution, population variance always has lower MSE
+than sample variation.
+
+
+# How many variables?
+
+This section describes how many variables (dimensions) are needed for sample
+variance to outperform population variance, as evaluated by MSE, when doing
+point estimation on the sum of variances of the many variables.
+
+As a multivariate distribution, we consider a $d$-dimensional random vector
+$D = (D_1, D_2, ..., D_d)$. We assume the component distributions are
+independent, but they need not be identically distributed.
+Each $D_c$ can be any distribution with finite mean and variance.
+
+For how large a dimension $d$ does sample variance achieve lower MSE than
+population variance when estimating $\theta$ as the sum of variances:
+\begin{eqnarray*}
+\theta & = & \sum_{c=1}^d \Vars{D_c}
+\end{eqnarray*}
+
+Let $S_c$ denote the population variance of $n$ samples
+from component distribution $D_c$.
+$$
+S_c := \frac{1}{n}
+    \sum_{i=1}^n \left(
+       X_{i,c} -  \frac{1}{n} \sum_{j=1}^n X_{j,c} 
+    \right)^2
+$$
+where $X_i$ are i.i.d. samples.
+
+Let $S$ denote the sum of population variances of the components.
+$$
+S := \sum_{c=1}^d S_c
+$$
+
+The expectation of population variance [@degroot_probability_2002] at component
+$c$ is
+\begin{eqnarray*}
+\Es{S_c} & = & \frac{n-1}{n} \Vars{D_c}
+\end{eqnarray*}
+and thus the expectation of the sum of population variances is
+\begin{eqnarray*}
+\Es{S} & = & \frac{n-1}{n} \sum_{c=1}^d \Vars{D_c}  \\
+\Es{S} & = & \frac{n-1}{n} \theta
+\end{eqnarray*}
+
+Thus the bias satisfies the condition of Theorem 1
+\begin{eqnarray*}
+\Es{S - \theta }
+  & = & - \frac{1}{n} \theta
+\end{eqnarray*}
+and thus the sum of samples variances has lower MSE than the sum of population
+variances if and only if
+\begin{eqnarray*}
+  \frac{\Es{S}^2}{\Vars{S}} & > & 2n-1
+\end{eqnarray*}
+
+Let $s_*$ equal the expected estimate averaged across all dimensions.
+\begin{eqnarray*}
+  s_* & := & \frac{1}{d} \sum_{c=1}^d \Es{S_c}
+\end{eqnarray*}
+and $v_*$ equal the estimator variance averaged across all dimensions.
+\begin{eqnarray*}
+  v_* & := & \frac{1}{d} \sum_{c=1}^d \Vars{S_c} 
+\end{eqnarray*}
+
+The inequality of Theorem 1 can be rewritten in terms of $s_*$ and
+$v_*$:
+$$
+\frac{\Es{S}^2}{\Vars{S}} 
+= \frac{\left(\sum_{c=1}^d \Es{S_c}\right)^2}{\sum_{c=1}^d \Vars{S_c}}
+= \frac{s_*^2}{v_*} d
+> 2n-1
+$$
+
+## Multivariate normal distributions
+
+If the component distributions $D_c$ do not differ greatly from each other
+$\frac{s_*^2}{v_*}$ will be near the range of values
+$\frac{\Es{S_c}}{\Vars{S_c}}$. In the case of normal distributions this
+is $\frac{n-1}{2}$. This results in an approximate condition
+$$
+d \frac{n-1}{2}
+\approx \frac{s_*^2}{v_*} d
+> 2n-1
+$$
+which can be expected to hold for $d > 4$.
+
+
+## Multivariate Bernoulli distributions
+
+The case of Bernoulli distributions does not have as clean a result as with normal
+distributions. But with Theorem 2, a lower bound of $s_*^2 / v_*$
+can be achieved.
+
+Without loss of generality, assume all Bernoulli distributions have a probability
+$p_c \le 1/2$.
+If any $p_c > 1/2$, the corresponding random variable $B_c$ can be replaced
+by a flipped random variable $B'_c := 1 - B_c$.
+
+\begin{eqnarray*}
+\frac{s_*^2}{v_*} & \ge & 2 p_* \frac{n-1}{n}  \\
+\frac{s_*^2}{v_*} d & \ge & 2 d p_* \frac{n-1}{n}  \\
+\frac{\Es{F}^2}{\Vars{F}} & \ge & 2 d p_* \frac{n-1}{n}  \\
+\end{eqnarray*}
+
+Now Theorem 1 can be applied whenever the lower bound
+is greater than $2n-1$. Combining both theorems we can conclude that if
+\begin{eqnarray*}
+2 d p_* & > & \frac{n}{n-1} (2n-1)  \\
+\end{eqnarray*}
+then the sample variance has lower MSE than population variance. The converse
+does not necessarily hold.
+
+Considering that $n$ must be at least $2$,
+\begin{eqnarray*}
+\frac{n}{n-1} (2n-1)
+  & \le & \frac{n}{n-1} (2n-1 + n-2)  \\
+  & \le & 3 n  \\
+\end{eqnarray*}
+which results in a simpler condition
+\begin{eqnarray*}
+2 d p_* & > & 3 n  \\
+\end{eqnarray*}
+implying that sample variance has lower MSE than population variance.
+
+
+# Conclusion
+
+For multivariate normal distributions (jointly independent), more than $4$ dimensions will
+result in the sum of sample variances achieving lower MSE than sum of population
+variances. Multivariate Bernoulli distributions are not as tractable but some bounds
+can be found depending on the average distribution probability across all dimensions.
+For an average distribution probability greater than $1/4$, four times as many
+dimensions as samples will result in sampler variation achieved lower MSE than 
+population variation. For small average probability, the number of dimensions must
+be larger. But no matter how small the average probability, there is some dimension
+that will be larger enough and the number of samples divided by the small average
+probability is likely enough dimensions.
+
+
+# Proofs
+
+#### Theorem 1
+
+Consider any estimator $F$ of parameter $\theta$ from a specific distribution, with
+\begin{eqnarray*}
+  \Es{F - \theta} & = & - \frac{1}{n} \theta
+\end{eqnarray*}
+It follows that (A)
+$$ \frac{n}{n-1} F$$
+is an unbiased esimator of $\theta$ and (B)
+\begin{eqnarray*}
+  \MSE{F} & > & \MSE{\frac{n}{n-1} F}
+\end{eqnarray*}
+if and only if
+\begin{eqnarray*}
+  \frac{\Es{F}^2}{\Vars{F}} & > & 2n-1
+\end{eqnarray*}
+
+**Proof**
+
+\begin{eqnarray*}
+\Es{F - \theta} & = & - \frac{1}{n} \theta  \\
+\Es{F} & = & (1 - \frac{1}{n} ) \theta  \\
+\Es{\frac{n}{n-1} F} & = & \theta  \\
+\end{eqnarray*}
+thus $\frac{n}{n-1} F$ is an unbiased estimator of $\theta$ and
+$$
+\Es{F - \theta}
+  = - \frac{1}{n} \theta  \\
+  = - \frac{1}{n} \frac{n}{n-1} \Es{F}  \\
+  = - \frac{\Es{F}}{n-1}
+$$
+
+\begin{eqnarray*}
+\MSE{F} & > & \MSE{\frac{n}{n-1} F}  \\
+\Vars{F} + \Es{F-\theta}^2 & > & \Vars{\frac{n}{n-1}F} + 0^2  \\
+\Es{F-\theta}^2 & > & \left(\frac{n^2}{(n-1)^2} - 1 \right) \Vars{F} \\
+\left(\frac{\Es{F}}{n-1}\right)^2 & > & \frac{2n-1}{(n-1)^2} \Vars{F} \\
+\frac{\Es{F}^2}{\Vars{F}} & > & 2n-1  \\
+\end{eqnarray*}
+QED
+
+
+#### Theorem 2
+
+Given independent samples $B_1$, ..., $B_n$ from a multivariate distribution
+of $d$ jointly independent Bernoulli distributions with probabilities $p_c \le 1/2$
+for $c \in \{1, ..., d\}$,
+\begin{eqnarray*}
+\frac{s_*^2}{v_*} & \ge & 2 p_* \frac{n-1}{n}  \\
+\end{eqnarray*}
+where
+$p_*$, $s_*$, and $v_*$ denote the average across component
+
+* Bernoulli distribution probability,
+* estimator expectation of population variance, 
+* estimator variance of population variance,
+
+respectively. More formally,
+\begin{eqnarray*}
+p_* & := & \frac{1}{d} \sum_{c=1}^d p_c \\
+s_* & := & \frac{1}{d} \sum_{c=1}^d \Es{S_c}  \\
+v_* & := & \frac{1}{d} \sum_{c=1}^d \Vars{S_c}  \\
+S_c & := & \hat{p}_c (1-\hat{p}_c)  \\
+\hat{p}_c & := & \frac{1}{n} \sum_{i=1}^n B_{i,c}  \\
+\end{eqnarray*}
+where $B_i = (B_{i,1}, B_{i,2}, ..., B_{i,d})$ is the $i$-th sample from the
+$d$-dimensional multivariate distribution.  $S_c$ is the population variance of
+the $n$ samples at the $c$-th component variable.
+
+**Proof**
+
+By Lemma 1, it is accurate to call $\hat{p}_c (1-\hat{p}_c)$ population variance.
+
+By Lemma 2,
+\begin{eqnarray*}
+\frac{1}{d} \sum_{c=1}^d \frac{\Es{S_c}}{4}
+   & \ge & \frac{1}{d} \sum_{c=1}^d \Vars{S_c}  \\
+\frac{1}{4} s_* & \ge & v_*   \\
+\frac{s_*^2}{v_*} & \ge & 4 s_*  \\
+\end{eqnarray*}
+
+From the expectation of population variance, the variance of a Bernoulli
+distributions, and $p_c \le 1/2$, for all $c$ we have
+\begin{eqnarray*}
+\Es{S_c}
+  & = & \frac{n-1}{n} p(1-p)  \\
+  & \ge & \frac{n-1}{n} \frac{p_c}{2}  \\
+\end{eqnarray*}
+
+Combining results gets
+\begin{eqnarray*}
+\frac{1}{d} \sum_{c=1}^d \Es{S_c}
+  & \ge & \frac{1}{d} \sum_{c=1}^d \frac{n-1}{n} \frac{p_c}{2}  \\
+s_* & \ge & \frac{n-1}{2n} p_*  \\
+4 s_* & \ge & 2 \frac{n-1}{n} p_*  \\
+\frac{s_*^2}{v_*} & \ge & 2 p_* \frac{n-1}{n}  \\
+\end{eqnarray*}
+
+
+#### Lemma 1
+
+$\hat{p} (1-\hat{p})$ equals the population variance of samples $B_1$, ...,
+$B_n$ from a Bernoulli distribution (taking values $0$ or $1$) where
+\begin{eqnarray*}
+\hat{p} & := & \frac{1}{n} \sum_{i=1}^n B_i
+\end{eqnarray*}
+
+**Proof**
+
+\begin{eqnarray*}
+\frac{1}{n} \sum_{i=1}^n \left(B_i - \hat{p} \right)^2
+  & = & \frac{1}{n} \sum_{i=1}^n B_i^2
+        - 2 \hat{p}_c\frac{1}{n} \sum_{i=1}^n B_i + \hat{p}^2  \\
+  & = & \frac{1}{n} \sum_{i=1}^n B_i - \hat{p}^2  \\
+  & = & \hat{p} - \hat{p}^2  \\
+  & = & \hat{p} (1-\hat{p})  \\
+\end{eqnarray*}
+QED
+
+
+#### Lemma 2
+
+Let $S$ denote population variance of samples drawn from a Bernoulli distribution.
+\begin{eqnarray*}
+\Vars{S} & \le & \frac{\Es{S}}{4}  \\
+\end{eqnarray*}
+
+**Proof**
+
+Define $\hat{p}$ as in Lemma 1.  Since $\hat{p} \in [0, 1]$, the following
+inequalities must hold.
+\begin{eqnarray*}
+\hat{p} (1-\hat{p}) & \le & \frac{1}{4}  \\
+\hat{p}^2 (1-\hat{p})^2 & \le & \frac{\hat{p} (1-\hat{p})}{4}  \\
+\Es{S^2} & \le & \frac{\Es{S}}{4}  \\
+\Es{S^2} - \Es{S}^2
+  & \le & \Es{S} \left(\frac{1}{4} - \Es{S}\right)  \\
+\Vars{S} & \le & \frac{\Es{S}}{4}  \\
+\end{eqnarray*}
+QED
+
+
+# References
+
+{% endblock answer %}
+
