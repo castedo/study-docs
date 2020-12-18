@@ -1,7 +1,7 @@
 {% extends 'osa/_answer.md.jinja' %}
 {% set aid = 138 %}
 {% set answers_questions = [1035] %}
-{% set title = "Variance estimation of a Bernoulli distribution" %}
+{% set title = "Sample vs population variance with Bernoulli distributions" %}
 
 {% block answer %}
 
@@ -20,19 +20,35 @@ Popular software, such as Excel, the Python `statistics` package and the R langu
 offer prominent functions named `variance` or `var` which default to
 calculating 'sample variance'.
 
-This document evaluates the use of this unbiased estimator for the variance of 
-the simplest and most basic distribution: [the Bernoulli
-distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution).
-Many other distributions can be derived from the Bernoulli
-distribution, but these results do not necessarily extend to those cases.
+This document evaluates the use of this unbiased estimator with the simplest
+and most basic distribution: [the Bernoulli
+distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution).  The
+conclusion is the biased estimator called 'population variance' is a better
+[point estimator](https://en.wikipedia.org/wiki/Point_estimation) than the
+unbiased 'sample variance', in the case of a Bernoulli distribution. It's worth
+noting that 'population variance' is the [Maximum Likelihood Estimator
+(MLE)](https://en.wikipedia.org/wiki/Maximum_likelihood_estimation) for a
+Bernoulli distribution. This document will refer to 'population variance' as
+the MLE.
 
-The conclusion is there is little justification in the case of a
-Bernoulli distribution, to seek an unbiased estimator when estimating 
-variance.  The simple definition of variance is
-preferable, if not equally good, compared to 'sample variance'. It's worth
-noting that the definition of variance is also the Maximum Likelihood Estimator
-(MLE) for a Bernoulli distribution.  This document will refer to the simple
-definition of variance as the MLE.
+# Useful applications of sample variance
+
+This document focuses on point estimation of univariate Bernoulli distribution
+variance. Although similar conclusions can be drawn for a univariate normal
+distribution, these results {{alink('do not generalize to multivariate
+distributions', 139)}}.
+
+Point estimation is not the only application for sample variance. Sample
+variance will precisely generate a
+[Chi-square distribution](https://en.wikipedia.org/wiki/Chi-square_distribution)
+given normally distributed samples of unit variance
+[@degroot_probability_2002].
+The Chi-square distribution in turn is part of the
+[t-distribution](https://en.wikipedia.org/wiki/Student%27s_t-distribution)
+which is the basis of the popular
+[t-test](https://en.wikipedia.org/wiki/Student%27s_t-test).
+Although sample variance can be point estimator, it can be very useful as a
+function that is not a point estimator.
 
 # A bias against bias
 
@@ -73,41 +89,22 @@ Which bus should the commuter take? The commuter could follow the rule that
 
 ## Better measures of desirability
 
-The fundamental problem with choosing the 'unbiased' bus A is that the two
-possible distances cancel each other out to zero difference from the desirable
-distance of 40 blocks. A more rational approach would be
-evaluate the expectation of all possible distances under a [loss
-function](https://en.wikipedia.org/wiki/Loss_function), not the
-raw distances.
+The fundamental problem with choosing the 'unbiased' bus A is that the too-short
+and too-long distances cancel each other out. A more rational approach would
+evaluate the *average utility* of the various distances, not the *average
+distance*. The most popular approach is to evaluate loss of utility with
+a [loss function](https://en.wikipedia.org/wiki/Loss_function). In the bus
+parable, this loss function could be the distance the commuter will need to
+walk after getting off the bus. This measure is called
+[Mean Absolute Error (MAE)](https://en.wikipedia.org/wiki/Mean_absolute_error).
 
-A very common choice with extremely convenient mathematical properties
+A more common choice with extremely convenient mathematical properties
 is [Mean Squared Error](https://en.wikipedia.org/wiki/Mean_squared_error)
 (MSE).
 A well known decomposition of MSE is the sum of the estimator variance plus the
 square of the bias. Although bias by itself may not be a good measure of
 quality, the magnitude of bias might be the important component of MSE
 depending on the relative magnitudes of estimator variance vs bias.
-
-In addition to MSE, this document will also look at the loss function which
-assigns estimates to $0$ if it is a possible
-[estimand](https://en.wikipedia.org/wiki/Estimand) or $1$ if it is an
-impossible estimand.
-This document will refer to the expectation of this loss function as the
-'Probability of Impossible Estimand' (PIE).
-
-## Applications of sample variance other than estimation
-
-Point estimation of an estimand is not the only application for sample
-variance. Sample variance will precisely generate a
-[Chi-square distribution](https://en.wikipedia.org/wiki/Chi-square_distribution)
-given normally distributed samples of unit variance
-[@degroot_probability_2002].
-The Chi-square distribution in turn is part of the
-[t-distribution](https://en.wikipedia.org/wiki/Student%27s_t-distribution)
-which is the basis of the popular
-[t-test](https://en.wikipedia.org/wiki/Student%27s_t-test).
-Although sample variance is an unbiased estimator, it can be very useful as a
-tool that is not a point estimator at all.
 
 # Bernoulli distribution
 
@@ -140,7 +137,7 @@ Simulation code is in a Jupyter notebook "biased_estimator" :
 [[as .ipynb file](biased_estimator.ipynb)]
 {% endif %}
 
-### Estimating when $p = 0.5$
+## Estimating when $p = 0.5$
 
 Consider the distribution of simulated estimates for n = 32 and $p = 0.5$:
 
@@ -155,40 +152,35 @@ The sample variance is as follows:
 
 <p> ![](ipynb_export/unbiased_p_half.png) </p>
 
-At first glance it might seem the unbiased is preferable. But consider
+At first glance it might seem the unbiased estimator is preferable. But consider
 that the range of possible estimands is $[0, 0.25]$. Even before observing
 one single data point, we know that the variance to be estimated can
 not be greater than $0.25$.
 
-{#
-The only estimates that are **actual possible** values for the variance must
-fall in the range $[0, 1/4]$. Any estimates greater than $1/4$ is known to
-not possibly be the value of the variance.
-#}
-
 In fact, in the specific case of $p = 0.5$ we should fully expect all
 estimates to be equal or less than the estimand and none greater than.
 
-Using the metrics of PIE, we see that the biased estimator has PIE equal
-to zero (good) and the unbiased estimator has PIE significantly greater
-than zero (bad).
-
-A third estimator with zero PIE can be achieved by taking the minimum of $0.25$
+A third estimator can be created by taking the minimum of $0.25$
 and the unbiased estimator. But this will no longer be an unbiased estimator.
 It is clearly better at estimating $p$ than the unbiased estimator. But is
-it better than the MLE?
+this new biased estimator better than the biased MLE?
 
 For distributions with $p$ near $0.5$ the unbiased estimator
 makes an irrational trade off of choosing impossible
-values of variance so that the error is zero *on average*. It is a similar
-trade-off to choosing the 'unbiased' bus over the 'biased' bus so as to
-have a result that is *on average* the desired value.
+values of variance so that the error *on average* is zero. It is a similar
+trade-off of choosing the 'unbiased' bus over the 'biased' bus so that the
+distance traveled is *on average* the desired distance.
 
-### PIE performance across all $p$
+## Probability of Impossible Estimand
+
+Another possible loss function assigns $1$ to an estimate if it is an
+impossible [estimand](https://en.wikipedia.org/wiki/Estimand) and $0$
+otherwise.  This document will refer to the expectation of this loss function
+as the 'Probability of Impossible Estimand' (PIE).
 
 We now consider PIE across all possible values of $p$. For the biased MLE,
-it is always zero. For the unbiased sample variance it depends on $p$ and
-the numbers of samples $n$. Here are simulations that summarize the trend:
+PIE is always zero. For the unbiased sample variance it depends on $p$ and
+the number of samples $n$. Here are simulations that summarize the trend:
 
 <p> ![](ipynb_export/unbiased_pie.png) </p>
 
@@ -199,32 +191,30 @@ of possible distributions.
 These issues with PIE are specific to distributions with bounded variance and
 not distributions with unbounded variance (e.g. the normal distribution).
 
-### Overall performance across all $p$
+## Overall performance across all $p$
 
 We finish looking at the performance in both PIE and MSE of both
-estimators. First we look MSE and average error (bias) for both sample variance
+estimators. First we look at MSE and average error (bias) for both sample variance
 and the MLE for $n=5$:
 
 <p> ![](ipynb_export/perf5.png) </p>
 
 We see that MSE is generally *smaller* with the MLE than sample variance for
 small sample sizes. So although the sample variance maintains an average error
-around zero, it does so at the cost of worse overall performance when evaluating
-MSE.
+around zero, it does so at the cost of worse overall performance, as evaluated
+by MSE.
 
 For a sample size of $n=20$ the line of PIE is added as a black line:
 
 <p> ![](ipynb_export/perf20.png) </p>
 
-Here we see that for low values of $p$ the MLE has better MSE than sample
+Here we see again that for low values of $p$ the MLE has better MSE than sample
 variance. For higher values of $p$, sample variance does achieve improved
 MSE but it does so at the cost of significantly increased PIE.
 
-> There ain't no such thing as a free lunch.
-
 # Conclusion
 
-When evaluated _as an estimator_ for a Bernoulli distribution, the sample
+When evaluated _as a point estimator_ for a Bernoulli distribution, the sample
 variance is not more desirable than the MLE. In fact, when evaluated in the
 context of two loss functions, MSE and PIE, the MLE is actually _more_
 desirable despite its label of being 'biased'.
