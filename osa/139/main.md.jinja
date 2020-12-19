@@ -29,7 +29,7 @@ can perform significantly better than population variance as a point estimator.
 # When does sample variance beat population variance
 
 Given an estimator $F$ of parameter $\theta$ of a specific distribution, the
-MSE can be decomposed into estimator variance plus bias squared:
+MSE can be decomposed into estimator variance plus bias squared
 [@degroot_probability_2002]:
 \begin{eqnarray*}
 \MSE{F} & = & \Vars{F} + \Es{F - \theta}^2
@@ -161,51 +161,33 @@ $$
 If the component distributions $D_c$ do not differ greatly from each other
 $\frac{s_*^2}{v_*}$ will be near the range of values
 $\frac{\Es{S_c}}{\Vars{S_c}}$. In the case of normal distributions this
-is $\frac{n-1}{2}$. This results in an approximate condition
+is $\frac{n-1}{2}$.
 $$
 d \frac{n-1}{2}
-\approx \frac{s_*^2}{v_*} d
+= \frac{s_*^2}{v_*} d
 > 2n-1
 $$
-which can be expected to hold for $d > 4$.
+which is equivalent to
+\begin{eqnarray*}
+d \frac{n-1}{2} & > & 2n-1  \\
+d & > & 2 \left( \frac{n}{n-1} + \frac{n-1}{n-1} \right)  \\
+d & > & 4 + \frac{2}{n-1}  \\
+\end{eqnarray*}
 
 
 ## Multivariate Bernoulli distributions
 
 The case of Bernoulli distributions does not have as clean a result as with normal
-distributions. But with Theorem 2, a lower bound of $s_*^2 / v_*$
-can be achieved.
-
-Without loss of generality, assume all Bernoulli distributions have a probability
-$p_c \le 1/2$.
-If any $p_c > 1/2$, the corresponding random variable $B_c$ can be replaced
+distributions. But with Theorem 0 the following simple condition
+\begin{eqnarray*}
+\sum_{c=1}^d p_c  & \ge & n + 1  \\
+\end{eqnarray*}
+does imply the sample variance achieved lower MSE than population variance.
+The $p_c$ are the probabilities of the Bernoulli distributions, but after
+flipping any Bernoulli distributions to have probability less than $1/2$.
+In other words, if any distribution $B_c$ has probability
+$p_c > 1/2$, the corresponding random variable $B_c$ can be replaced
 by a flipped random variable $B'_c := 1 - B_c$.
-
-\begin{eqnarray*}
-\frac{s_*^2}{v_*} & \ge & 2 p_* \frac{n-1}{n}  \\
-\frac{s_*^2}{v_*} d & \ge & 2 d p_* \frac{n-1}{n}  \\
-\frac{\Es{F}^2}{\Vars{F}} & \ge & 2 d p_* \frac{n-1}{n}  \\
-\end{eqnarray*}
-
-Now Theorem 1 can be applied whenever the lower bound
-is greater than $2n-1$. Combining both theorems we can conclude that if
-\begin{eqnarray*}
-2 d p_* & > & \frac{n}{n-1} (2n-1)  \\
-\end{eqnarray*}
-then the sample variance has lower MSE than population variance. The converse
-does not necessarily hold.
-
-Considering that $n$ must be at least $2$,
-\begin{eqnarray*}
-\frac{n}{n-1} (2n-1)
-  & \le & \frac{n}{n-1} (2n-1 + n-2)  \\
-  & \le & 3 n  \\
-\end{eqnarray*}
-which results in a simpler condition
-\begin{eqnarray*}
-2 d p_* & > & 3 n  \\
-\end{eqnarray*}
-implying that sample variance has lower MSE than population variance.
 
 
 # Conclusion
@@ -223,6 +205,64 @@ probability is likely enough dimensions.
 
 
 # Proofs
+
+#### Theorem 0
+
+Given $n \ge 2$ independent samples from a multivariate distribution of $d$
+jointly independent Bernoulli distributions with probabilities $p_c \le 1/2$
+for $c \in \{1, ..., d\}$, if
+\begin{eqnarray*}
+\sum_{c=1}^d p_c  & \ge & n + 1  \\
+\end{eqnarray*}
+then the sum of sample variances has lower MSE than the sum of population
+variances.
+
+**Proof**
+\begin{eqnarray*}
+1 + \frac{1}{n-1}
+  & = &
+\frac{n}{n-1}  \\
+2n + 2\left(1 + \frac{1}{n-1}\right)
+  & = &
+2n + 2 \frac{n}{n-1}  \\
+2n + \left(1 + \frac{1}{n-1}\right)
+  & = &
+2n \left(1 + \frac{1}{n-1}\right) - \left(1 + \frac{1}{n-1}\right)  \\
+2n + 1 + \frac{1}{n-1}
+  & = &
+\frac{n}{n-1}(2n-1)  \\
+\end{eqnarray*}
+
+Let
+\begin{eqnarray*}
+p_* & := & \frac{1}{d} \sum_{c=1}^d p_c \\
+\end{eqnarray*}
+
+\begin{eqnarray*}
+\sum_{c=1}^d p_c  & \ge & n + 1  \\
+2 p_* d  & \ge & 2(n + 1)  \\
+  & \ge & 2n + 1 + \frac{1}{n-1}  \\
+  & \ge & \frac{n}{n-1} (2n - 1)  \\
+2 p_* d \frac{n-1}{n} & \ge & 2n - 1  \\
+\end{eqnarray*}
+
+By Theorem 2,
+\begin{eqnarray*}
+\frac{s_*^2}{v_*} d & \ge & 2 p_* d \frac{n-1}{n}  \\
+  & \ge & 2n - 1  \\
+\end{eqnarray*}
+
+Given that
+$$
+\frac{\Es{S}^2}{\Vars{S}} 
+= \frac{\left(\sum_{c=1}^d \Es{S_c}\right)^2}{\sum_{c=1}^d \Vars{S_c}}
+= \frac{\left(s_* d\right)^2}{v_* d}
+= \frac{s_*^2}{v_*} d
+$$
+
+From Theorem 1, it follow that the sum of sample variances has smaller MSE than
+the sum of population variances.
+
 
 #### Theorem 1
 
@@ -269,7 +309,7 @@ QED
 #### Theorem 2
 
 Given independent samples $B_1$, ..., $B_n$ from a multivariate distribution
-of $d$ jointly independent Bernoulli distributions with probabilities $p_c \le 1/2$
+of $d$ Bernoulli distributions with probabilities $p_c \le 1/2$
 for $c \in \{1, ..., d\}$,
 \begin{eqnarray*}
 \frac{s_*^2}{v_*} & \ge & 2 p_* \frac{n-1}{n}  \\
