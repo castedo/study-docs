@@ -9,10 +9,6 @@
 \newcommand{\MSE}[1]{\operatorname{MSE}\!\left[{ #1}\right]}
 {% endraw %}
 
->
-> ## WORK IN PROGRESS
->
-
 # Introduction
 
 On a normal distribution, sample variance does not perform better than
@@ -24,92 +20,61 @@ evaluated by MSE and Probability of Impossible Estimand [@castedo_osa_138].
 However, this underperformance of sample variance does not
 extend to the sum of variances of a multivariate distribution.
 Depending on the multivariate distribution, below a certain number of samples
-and above a certain number of variables (or dimensions), sample variance
+and above a certain number of variates (or dimensions), sample variance
 achieves lower MSE than population variance. This document provides 
 simple conditions for when lower MSE is achieved.
 
-# Conditions favoring sample variance
+# Formal Setup
 
-A $d$-dimensional random vector $D = (D_1, D_2, ..., D_d)$ specifies a
-multivariate distribution.  We assume the component distributions are
-independent, but they need not be identically distributed.  Each $D_c$ can be
-any distribution with finite mean and variance.
-
-The population parameter to be estimated is the sum of variances to be denoted:
+In this document, a $d$-dimensional random vector $D = (D_1, D_2, ..., D_d)$
+defines the multivariate distribution under consideration.
+All $D_c$ must be jointly independent and must have finite mean and variance.
+$S_c$ denotes the population variance at variate $D_c$ with $n$ samples from
+the multivariate distribution.
 \begin{eqnarray*}
-\theta & = & \sum_{c=1}^d \Vars{D_c}
-\end{eqnarray*}
-
-Let $S_c$ denote the population variance of $n$ samples
-from component distribution $D_c$.
-$$
-S_c := \frac{1}{n}
+S_c & := & \frac{1}{n}
     \sum_{i=1}^n \left(
        X_{i,c} -  \frac{1}{n} \sum_{j=1}^n X_{j,c} 
     \right)^2
-$$
-where $X_i$ are i.i.d. samples.
-
-Let $S$ denote the sum of population variances of the components.
-$$
-S := \sum_{c=1}^d S_c
-$$
-
-The expectation of population variance [@degroot_probability_2002] at component
-$c$ is
-\begin{eqnarray*}
-\Es{S_c} & = & \frac{n-1}{n} \Vars{D_c}
 \end{eqnarray*}
-and thus the expectation of the sum of population variances is
-\begin{eqnarray*}
-\Es{S} & = & \frac{n-1}{n} \theta
-\end{eqnarray*}
-
-It will be convenient to look at the expectation and variance of population
-variance averaged across components.
-
-Let $s_*$ equal the expected estimate averaged across all dimensions.
+where $X_i = (X_{i,1}, X_{i,2}, ..., X_{i,d})$ is the $i$-th sample from the
+$d$-dimensional multivariate distribution.
+Let $s_*$ equal the estimator expectation averaged across dimensions.
 \begin{eqnarray*}
   s_* & := & \frac{1}{d} \sum_{c=1}^d \Es{S_c}
 \end{eqnarray*}
-and $v_*$ equal the estimator variance averaged across all dimensions.
+and $v_*$ equal the estimator variance averaged across dimensions.
 \begin{eqnarray*}
   v_* & := & \frac{1}{d} \sum_{c=1}^d \Vars{S_c} 
 \end{eqnarray*}
 
-The expected value and variance of the sum of population variances can be
-expressed in terms of these averages.
-$$
-\frac{\Es{S}^2}{\Vars{S}} 
-= \frac{\left(\sum_{c=1}^d \Es{S_c}\right)^2}{\sum_{c=1}^d \Vars{S_c}}
-= \frac{s_*^2}{v_*} d
-$$
 
-Thus by Theorem 1 the sum of samples variances has lower MSE than the sum of
-population
-variances if and only if
+# Conditions favoring sample variance
+
+By Corollary 2 the sum of samples variances has lower MSE than the sum of
+population variances if and only if
 \begin{eqnarray*}
 \frac{s_*^2}{v_*} d & > & 2n-1
 \end{eqnarray*}
 
-This result applies to any distribution as long as the averages $s_*$ and $v_*$
+This result applies to any distribution as long as $s_*$ and $v_*$
 exist. We can see that for a large numbers of dimensions and not particularly
 small average estimates, the condition is met for sample variance to outperform
 population variance.
 
-More precise conditions can be isolation assume particular distributions such
+More precise conditions can be found assuming particular distributions such
 as Bernoulli and normal distributions.
 
 
 ## Multivariate Bernoulli distributions
 
-With Theorem 0 the following simple condition
+With Theorem 1 the following simple condition
 \begin{eqnarray*}
 \sum_{c=1}^d p_c  & \ge & n + 1  \\
 \end{eqnarray*}
 implies the sample variance achieves lower MSE than population variance.
 The $p_c$ are the probabilities of the Bernoulli distributions, but after
-flipping any Bernoulli distributions to have probability less than $1/2$.
+flipping any Bernoulli distributions to have probabilities less than $1/2$.
 In other words, if any distribution $B_c$ has probability
 $p_c > 1/2$, the corresponding random variable $B_c$ can be replaced
 by a flipped random variable $B'_c := 1 - B_c$.
@@ -117,35 +82,18 @@ by a flipped random variable $B'_c := 1 - B_c$.
 
 ## Multivariate normal distributions
 
-Consider any $S_c$ as the population variance of $n$ samples from a normal
-distribution with variance $\sigma^2$.
-$n S_c / \sigma^2$ has a chi-squared distribution with $n-1$ degrees of freedom
-[@degroot_probability_2002] and thus:
+For a multivariate normal distribution with equal variances across dimensions,
+Theorem 4 shows that sample variance achieves lower MSE than population
+variance if and only if
 \begin{eqnarray*}
-\Es{n S_c / \sigma^2} & = & n-1 \\
-\Es{S_c} & = & \frac{n-1}{n \sigma^2}  \\
-\Vars{n S_c / \sigma^2} & = & 2(n-1) \\
-\Vars{S_c} & = & \frac{2(n-1)}{n^2 \sigma^4} \\
-\frac{\Es{S_c}^2}{\Vars{S_c}} & = & \frac{n-1}{2} \\
+d & > & 4 + \frac{2}{n-1}  \\
 \end{eqnarray*}
 
-For a multivariate normal distribution,
-if all $\Es{S_c}$ are close to $s_*$ and all $\Vars{S_c}$ are close to $v_*$,
-then
+If all $\Es{S_c}$ are close to $s_*$ and all $\Vars{S_c}$ are close to $v_*$,
+then the inequality condition of Theorem 4 is only approximate 
 \begin{eqnarray*}
-\frac{n-1}{2} d & \approx & \frac{s_*^2}{v_*} d
+d & \gtrapprox & 4 + \frac{2}{n-1}
 \end{eqnarray*}
-in which case
-\begin{eqnarray*}
-\frac{n-1}{2} d & \gtrapprox & 2n-1
-\end{eqnarray*}
-which further simplifies to
-\begin{eqnarray*}
-d & \gtrapprox & 2 \left( \frac{n}{n-1} + \frac{n-1}{n-1} \right)  \\
-d & \gtrapprox & 4 + \frac{2}{n-1}  \\
-\end{eqnarray*}
-will approximate the boundary between sample variance vs population 
-variance having lower or higher variance.
 
 
 # Conclusion
@@ -155,7 +103,7 @@ estimated and variance of the estimates, there is some number of dimensions
 large enough for the sum of sample variances to be a better estimator than the
 sum of population variances, as measured by MSE.
 
-In the general case, Theorem 0 provides a simple condition based on
+In the general case, Theorem 1 provides a simple condition based on
 averages across dimensions. In the case of multivariate Bernoulli distributions,
 if the sum of distribution probabilities is greater than $n+1$, then sample
 variance performs better.
@@ -166,7 +114,7 @@ dimensions.
 
 # Proofs
 
-#### Theorem 0
+#### Theorem 1
 
 Given $n \ge 2$ independent samples from a multivariate distribution of $d$
 jointly independent Bernoulli distributions with probabilities $p_c \le 1/2$
@@ -206,7 +154,7 @@ p_* & := & \frac{1}{d} \sum_{c=1}^d p_c \\
 2 p_* d \frac{n-1}{n} & \ge & 2n - 1  \\
 \end{eqnarray*}
 
-By Theorem 2,
+By Theorem 3,
 \begin{eqnarray*}
 \frac{s_*^2}{v_*} d & \ge & 2 p_* d \frac{n-1}{n}  \\
   & \ge & 2n - 1  \\
@@ -220,11 +168,11 @@ $$
 = \frac{s_*^2}{v_*} d
 $$
 
-From Theorem 1, it follow that the sum of sample variances has smaller MSE than
+From Theorem 2, it follow that the sum of sample variances has smaller MSE than
 the sum of population variances.
 
 
-#### Theorem 1
+#### Theorem 2
 
 Consider any estimator $F$ of parameter $\theta$ from a specific distribution where
 \begin{eqnarray*}
@@ -257,35 +205,79 @@ if and only if
 QED
 
 
-#### Theorem 2
+#### Corollary 2
 
-Given independent samples $B_1$, ..., $B_n$ from a multivariate distribution
+Given $n \ge 2$ independent samples from a multivariate distribution of $d$
+jointly independent distributions, the sum of sample variances has lower MSE
+than the sum of population variances
+if and only if
+\begin{eqnarray*}
+\frac{s_*^2}{v_*} d & > & 2n-1
+\end{eqnarray*}
+where $s_*$ and $v_*$ are defined in section 'Formal section'.
+
+**Proof**
+
+The population parameter to be estimated is the sum of variances
+\begin{eqnarray*}
+\theta & = & \sum_{c=1}^d \Vars{D_c}
+\end{eqnarray*}
+
+$S$ denotes the sum of population variances of the components.
+\begin{eqnarray*}
+S & := & \sum_{c=1}^d S_c
+\end{eqnarray*}
+
+The expectation of population variance [@degroot_probability_2002] at component
+$c$ is
+\begin{eqnarray*}
+\Es{S_c} & = & \frac{n-1}{n} \Vars{D_c}
+\end{eqnarray*}
+and thus the expectation of the sum of population variances is
+\begin{eqnarray*}
+\Es{S} & = & \frac{n-1}{n} \theta
+\end{eqnarray*}
+
+The expected value and variance of the sum of population variances can be
+expressed in terms of these averages.
+$$
+\frac{\Es{S}^2}{\Vars{S}} 
+= \frac{\left(\sum_{c=1}^d \Es{S_c}\right)^2}{\sum_{c=1}^d \Vars{S_c}}
+= \frac{s_*^2}{v_*} d
+$$
+
+Thus by Theorem 2 the sum of samples variances has lower MSE than the sum of
+population variances if and only if
+\begin{eqnarray*}
+\frac{s_*^2}{v_*} d & > & 2n-1
+\end{eqnarray*}
+
+QED
+
+
+#### Theorem 3
+
+Given independent samples $X_1$, ..., $X_n$ from a multivariate distribution
 of $d$ Bernoulli distributions with probabilities $p_c \le 1/2$
 for $c \in \{1, ..., d\}$,
 \begin{eqnarray*}
 \frac{s_*^2}{v_*} & \ge & 2 p_* \frac{n-1}{n}  \\
 \end{eqnarray*}
-where
-$p_*$, $s_*$, and $v_*$ denote the average across component
-
-* Bernoulli distribution probability,
-* estimator expectation of population variance, 
-* estimator variance of population variance,
-
-respectively. More formally,
+where $s_*$ and $v_*$ are defined in section 'Formal section' and
+$p_*$ denote the average across components of Bernoulli distribution probability.
+More formally,
 \begin{eqnarray*}
 p_* & := & \frac{1}{d} \sum_{c=1}^d p_c \\
-s_* & := & \frac{1}{d} \sum_{c=1}^d \Es{S_c}  \\
-v_* & := & \frac{1}{d} \sum_{c=1}^d \Vars{S_c}  \\
-S_c & := & \hat{p}_c (1-\hat{p}_c)  \\
-\hat{p}_c & := & \frac{1}{n} \sum_{i=1}^n B_{i,c}  \\
 \end{eqnarray*}
-where $B_i = (B_{i,1}, B_{i,2}, ..., B_{i,d})$ is the $i$-th sample from the
-$d$-dimensional multivariate distribution.  $S_c$ is the population variance of
-the $n$ samples at the $c$-th component variable.
 
 **Proof**
 
+Define $S_c$ as found in section 'Formal setup' and
+\begin{eqnarray*}
+\hat{p}_c & := & \frac{1}{n} \sum_{i=1}^n X_{i,c}  \\
+\end{eqnarray*}
+where $X_i = (X_{i,1}, X_{i,2}, ..., X_{i,d})$ is the $i$-th sample from the
+$d$-dimensional multivariate distribution.
 By Lemma 1, it is accurate to call $\hat{p}_c (1-\hat{p}_c)$ population variance.
 
 By Lemma 2,
@@ -314,21 +306,60 @@ s_* & \ge & \frac{n-1}{2n} p_*  \\
 \end{eqnarray*}
 
 
+#### Theorem 4
+
+Given $n \ge 2$ samples from a multivariate distribution of jointly independent
+normal distributions all with variance $\sigma^2$, the sum of sample variances
+has lower MSE than the sum of population variances if and only if
+\begin{eqnarray*}
+d & > & 4 + \frac{2}{n-1}  \\
+\end{eqnarray*}
+
+**Proof**
+
+Consider any $S_c$ as the population variance of the $n$ samples from the given
+distribution. $n S_c / \sigma^2$ has a chi-squared distribution with $n-1$
+degrees of freedom [@degroot_probability_2002] and thus:
+\begin{eqnarray*}
+\Es{n S_c / \sigma^2} & = & n-1  \\
+\Es{S_c} & = & \frac{n-1}{n \sigma^2}  \\
+\Vars{n S_c / \sigma^2} & = & 2(n-1)  \\
+\Vars{S_c} & = & \frac{2(n-1)}{n^2 \sigma^4}  \\
+\end{eqnarray*}
+and thus
+$$
+\frac{s_*^2}{v_*}
+  = \frac{\left( \frac{n-1}{n \sigma^2} \right)^2}{ \frac{2(n-1)}{n^2 \sigma^4}}  \\
+  = \frac{n-1}{2}
+$$
+which means the inequality of Theorem 2 can be replaced with
+\begin{eqnarray*}
+\frac{n-1}{2} d & > & 2n-1
+\end{eqnarray*}
+and further simplified to 
+\begin{eqnarray*}
+d & > & 2 \left( \frac{n}{n-1} + \frac{n-1}{n-1} \right)  \\
+d & > & 4 + \frac{2}{n-1}  \\
+\end{eqnarray*}
+
+QED
+
+
 #### Lemma 1
 
-$\hat{p} (1-\hat{p})$ equals the population variance of samples $B_1$, ...,
-$B_n$ from a Bernoulli distribution (taking values $0$ or $1$) where
+$\hat{p} (1-\hat{p})$ equals the population variance of samples $X_1$, ...,
+$X_n$ from a Bernoulli distribution (taking values $0$ or $1$) where
 \begin{eqnarray*}
-\hat{p} & := & \frac{1}{n} \sum_{i=1}^n B_i
+\hat{p} & := & \frac{1}{n} \sum_{i=1}^n X_i
 \end{eqnarray*}
 
 **Proof**
 
 \begin{eqnarray*}
-\frac{1}{n} \sum_{i=1}^n \left(B_i - \hat{p} \right)^2
-  & = & \frac{1}{n} \sum_{i=1}^n B_i^2
-        - 2 \hat{p}_c\frac{1}{n} \sum_{i=1}^n B_i + \hat{p}^2  \\
-  & = & \frac{1}{n} \sum_{i=1}^n B_i - \hat{p}^2  \\
+\frac{1}{n} \sum_{i=1}^n \left(X_i - \hat{p} \right)^2
+  & = & \frac{1}{n} \sum_{i=1}^n X_i^2
+        - 2 \hat{p}_c\frac{1}{n} \sum_{i=1}^n X_i + \hat{p}^2  \\
+  & = & \frac{1}{n} \sum_{i=1}^n X_i - \hat{p}^2  \\
   & = & \hat{p} - \hat{p}^2  \\
   & = & \hat{p} (1-\hat{p})  \\
 \end{eqnarray*}
