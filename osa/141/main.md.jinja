@@ -1,0 +1,229 @@
+{% extends 'osa/_answer.md.jinja' %}
+{% set aid = 141 %}
+{% set answers_questions = [1039] %}
+{% set title = "Multiplicative autocorrelation in stationary Markov processes" %}
+
+{% block answer %}
+
+{% raw %}
+\newcommand{\Cor}[2]{\operatorname{Cor}\!\left[{ #1}, { #2}\right]}
+\newcommand{\Cov}[2]{\operatorname{Cov}\!\left[{ #1}, { #2}\right]}
+{% endraw %}
+
+# Summary
+
+A stationary process $Z_t$ has *multiplicative autocorrelation* when
+\begin{eqnarray*}
+\Cor{Z_t}{Z_r} & = & \Cor{Z_t}{Z_s} \Cor{Z_s}{Z_r}
+\end{eqnarray*}
+for all $t \le s \le r$. Autocorrelation is defined as
+\begin{eqnarray*}
+\Cor{Z_t}{Z_s} & := & \frac{ \Cov{Z_t}{Z_s} }{\sigma^2}
+\end{eqnarray*}
+with $\sigma^2 = \Var{Z_t}$.
+
+A stationary autoregressive process has multiplicative autocorrelation
+[@hamilton_time_1994].
+However, not all stationary Markov processes have multiplicative autocorrelation.
+See the section below about a real-valued 3-state Markov chain for a counterexample.
+
+Among discrete-time stationary processes, only autoregressive processes have
+multiplicative autocorrelation.  Some Markov processes are not obviously
+autoregressive processes even though technically they are.
+For example, all stationary real-valued two-state Markov chains are
+autoregressive (and thus also have multiplicative autocorrelation).
+
+# Multiplicative autocorrelation implies autoregression
+
+Consider any real-valued discrete-time stationary Markov process $Z'_t$ and translate
+it to $Z_t := Z'_t - \Es{Z'_t}$ without loss of generality.
+
+Let
+\begin{eqnarray*}
+\sigma^2 & := & \Var{Z_t}  \\
+\rho & := & \Cov{Z_t}{Z_{t+1}} / \sigma^2
+\end{eqnarray*}
+
+Multiplicative autocorrelation implies
+\begin{eqnarray*}
+\Cor{Z_t}{Z_{t+n}} & = & \rho^n  \\
+\Cov{Z_t}{Z_{t+n}} & = & \rho^n \sigma^2
+\end{eqnarray*}
+
+Define what will be shown to be "white noise" of $Z_t$ as autoregressive process:
+\begin{eqnarray*}
+\epsilon_t & := & Z_t - \rho Z_{t-1}
+\end{eqnarray*}
+By convenient translation,
+\begin{eqnarray*}
+\Es{Z_t} & = & 0  \\
+\epsilon_t & = & 0  \\
+\Cov{Z_t}{Z_s} & = & \Es{Z_t Z_s}  \\
+\Es{Z_t^2} & = & \sigma^2  \\
+\Es{Z_t Z_{t+1}} & = & \rho
+\end{eqnarray*}
+
+Consider any $n > 0$.
+\begin{eqnarray*}
+\Es{\epsilon_t \epsilon_{t+n}}
+    & = & \Es{(Z_t - \rho Z_{t-1})(Z_{t+n} - \rho Z_{t+n-1})}  \\
+    & = & \Es{Z_t Z_{t+n}} + \rho^2 \Es{Z_{t-1} Z_{t+n-1}}
+        - \rho (\Es{Z_t Z_{t+n-1}} + \Es{Z_{t-1} Z_{t+n}})  \\
+    & = & (1 + \rho^2) \rho^n \sigma^2
+        - \rho (\rho^{n-1} \sigma^2 + \rho^{n+1} \sigma^2)  \\
+    & = & 0
+\end{eqnarray*}
+thus $\epsilon_t$ satisfies the "white noise" condition for expressing $Z_t$
+as the autoregressive process
+\begin{eqnarray*}
+Z_{t+1} & = & \rho Z_t + \epsilon_t
+\end{eqnarray*}
+QED
+
+
+# Real-valued 2-state Markov chain
+
+For any stationary two-state Markov chain [@hamilton_time_1994] $Z_t$,
+\begin{eqnarray*}
+\Cor{Z_t}{Z_0} & = & \Cor{Z_t}{Z_s} \Cor{Z_s}{Z_0}
+\end{eqnarray*}
+
+**Proof**
+Let
+\begin{eqnarray*}
+q_1 := \P{ Z_t = a_1 }  \\
+q_0 := \P{ Z_t = a_0 }
+\end{eqnarray*}
+Map $Z_t$ to a more convenient
+\begin{eqnarray*}
+Y_t & := \frac{Z_t - a_0}{a_1 - a_0}
+\end{eqnarray*}
+Since $Y_t$ only equals $0$ or $1$:
+$$
+\Es{Y_t} = \Es{Y_t^2} = q_1
+$$
+and thus
+$$
+\Var{Y_t} = q_1 - q_1^2 = q_1 q_0
+$$
+For convenience let
+\begin{eqnarray*}
+p_0 & := & \P{ Y_1 = 0 \mid Y_0 = 1 }  \\
+p_1 & := & \P{ Y_1 = 1 \mid Y_0 = 0 }  \\
+s & := & p_0 + p_1
+\end{eqnarray*}
+Since $Y_t$ is stationary, it follows that $q_i = p_i/s$ for $i \in \{0,1\}$.
+In preparation for induction, assume
+\begin{eqnarray*}
+\P{ Y_t = 1 \mid Y_0 = 1 } & = & q_1 + q_0 (1-s)^t  \\
+\P{ Y_t = 1 \mid Y_0 = 0 } & = & q_1 - q_1 (1-s)^t
+\end{eqnarray*}
+It must follow that
+\begin{eqnarray*}
+\P{ Y_{t+1} = 1 \mid Y_0 = 1 }
+    & = & \P{ Y_{t+1} = 1 \mid Y_1 = 1 } (1-p_0)
+        + \P{ Y_{t+1} = 1 \mid Y_1 = 0 } p_0  \\
+    & = & [q_1 + q_0 (1-s)^t] (1-p_0)
+        + [q_1 - q_1 (1-s)^t] p_0  \\
+    & = & q_1 + [q_0 (1-p_0) - q_1 p_0](1-s)^t  \\
+    & = & q_1 + [q_0 (1-p_0) - (1- q_0) p_0](1-s)^t  \\
+    & = & q_1 + [q_0 - p_0](1-s)^t  \\
+    & = & q_1 + [q_0 - q_0 s](1-s)^t  \\
+    & = & q_1 + q_0 (1-s)^{t+1}  \\
+\end{eqnarray*}
+and
+\begin{eqnarray*}
+\P{ Y_{t+1} = 1 \mid Y_0 = 0 }
+    & = & \P{ Y_{t+1} = 1 \mid Y_1 = 1 } p_1
+        + \P{ Y_{t+1} = 1 \mid Y_1 = 0 } (1-p_1)  \\
+    & = & [q_1 + q_0 (1-s)^t] p_1
+        + [q_1 - q_1 (1-s)^t] (1-p_1)  \\
+    & = & q_1 + [q_0 p_1 - q_1 (1-p_1)](1-s)^t  \\
+    & = & q_1 + [(1 - q_1) p_1 - q_1 (1-p_1)](1-s)^t  \\
+    & = & q_1 + [p_1 - q_1](1-s)^t  \\
+    & = & q_1 + [q_1 s - q_1](1-s)^t  \\
+    & = & q_1 - q_1 (1-s)^{t+1}  \\
+\end{eqnarray*}
+which completes induction, noting the base case of $t=0$ is true.
+
+Due to the convenient mapping to $Y_t$,
+\begin{eqnarray*}
+\Es{Y_t Y_0}
+    & = & \P{ Y_t = 1 \mid Y_0 = 1 } \P{Y_0 = 1}  \\
+    & = & (q_1 + q_0 (1-s)^t) q_1  \\
+    & = & q_1^2  + q_0 q_1 (1-s)^t
+\end{eqnarray*}
+thus
+\begin{eqnarray*}
+\Cov{Y_t}{Y_0}
+    & = & \Es{Y_t Y_0} - \Es{Y_t} \Es{Y_0}  \\
+    & = & q_1^2 + q_0 q_1 (1-s)^t - q_1^2  \\
+    & = & q_0 q_1 (1-s)^t  \\
+\Cor{Y_t}{Y_0} & = & (1-s)^t
+\end{eqnarray*}
+QED
+
+
+# Counterexample of Real-Valued 3-State Markov Chain
+
+Let $Z_t$ be a stationary Markov process such that
+$$
+\P{Z_t = -1} = \P{Z_t = 0} = \P{Z_t = 1} = 1/3
+$$
+\begin{eqnarray*}
+\P{ Z_{t+1} = 0 \mid Z_t = -1} & = & 1/2  \\
+\P{ Z_{t+1} = 1 \mid Z_t = 0} & = & 1/2   \\
+\P{ Z_{t+1} = -1 \mid Z_t = 1} & = & 1/2
+\end{eqnarray*}
+and for all $i \in \{-1, 0, 1\}$,
+\begin{eqnarray*}
+\P{ Z_{t+1} = i \mid Z_t = i} & = & 1/2  \\
+\end{eqnarray*}
+
+Conveniently $\Es{Z_t} = 0$, thus $\Cov{Z_t}{Z_s} = \Es{Z_t Z_s}$.
+For one time step we have
+\begin{eqnarray*}
+  \P{ Z_1 = 1 \wedge Z_0 = 1 } & = & (1/3)(1/2)  \\
+  \P{ Z_1 = -1 \wedge Z_0 = 1 } & = & (1/3)(1/2)  \\
+  \P{ Z_1 = 1 \wedge Z_0 = -1 } & = & 0  \\
+  \P{ Z_1 = -1 \wedge Z_0 = -1 } & = & (1/3)(1/2)
+\end{eqnarray*}
+thus autocorrelation of one time step must be positive:
+$$
+ \Es{Z_1 Z_0}
+    = (1 \cdot 1) \frac{1}{6}
+    + (-1 \cdot 1) \frac{1}{6}
+    + (-1 \cdot -1) \frac{1}{6}
+    = \frac{1}{6}
+$$
+For two time steps
+\begin{eqnarray*}
+  \P{ Z_2 = 1 \wedge Z_0 = 1 } & = & (1/3) (1/2)^2  \\
+  \P{ Z_2 = -1 \wedge Z_0 = 1 } & = & (1/3) [ (1/2)^2 + (1/2)^2 ]  \\
+  \P{ Z_2 = 1 \wedge Z_0 = -1 } & = & (1/3) (1/2)^2  \\
+  \P{ Z_2 = -1 \wedge Z_0 = -1 } & = & (1/3) (1/2)^2
+\end{eqnarray*}
+thus the autocorrelation for two time steps must be negative:
+$$
+ \Es{Z_2 Z_0}
+    = (1 \cdot 1) \frac{1}{12}
+    + (-1 \cdot 1) \frac{2}{12}
+    + (1 \cdot -1) \frac{1}{12}
+    + (-1 \cdot -1) \frac{1}{12}
+    = - \frac{1}{12}
+$$
+thus
+\begin{eqnarray*}
+  \Cor{Z_2}{Z_0} & \not= & \Cor{Z_2}{Z_1} \Cor{Z_1}{Z_0}
+\end{eqnarray*}
+
+
+
+
+
+
+
+# References
+
+{% endblock answer %}
+
