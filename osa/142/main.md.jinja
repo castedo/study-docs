@@ -1,0 +1,168 @@
+{% extends 'osa/_answer.md.jinja' %}
+{% set aid = 142 %}
+{% set answers_questions = [1040] %}
+{% set title = "Short simple proof of the Cauchy-Schwarz inequality" %}
+
+{% block answer %}
+
+In my opinion, the following proof is the shortest, simplest and best proof of
+the [Cauchy-Schwarz inequality](https://en.wikipedia.org/wiki/Cauchy%E2%80%93Schwarz_inequality).
+It is a proof developed in [The Cauchy-Schwarz Master Class: An Introduction to
+the Art of Mathematical
+Inequalities](http://www-stat.wharton.upenn.edu/%7Esteele/Publications/Books/CSMC/CSMC_index.html)
+[@steele_cauchy-schwarz_2004].
+Below are three variations of the proof at three increasing levels of
+abstraction. These three variations are expressed respectively in terms of:
+
+* random variables [@degroot_probability_2002]
+* vectors of any _real_ inner product space [@steele_cauchy-schwarz_2004]
+* vectors of _any_ inner product space (real or complex) [@wiki:1024014552]
+
+The Cauchy-Schwarz inequality was originally expressed in terms of sequences
+of numbers [@steele_cauchy-schwarz_2004]. The continuous analogue is in terms
+of two [integrable
+functions](https://mathworld.wolfram.com/SchwarzsInequality.html)
+[@mathworld:schwarz_inequality].
+
+
+## In terms of random variables
+
+Given any two random variables $X$ and $Y$,
+\begin{equation*}
+\Es{XY}^2 \le \Es{X^2} \Es{Y^2}
+\end{equation*}
+with equality holding iff $a X + b Y = 0$ for some constants $a$ and $b$,
+at least one non-zero
+(i.e. $X$ and $Y$ are linearly dependent).
+
+**Proof**
+
+If either $\Es{X^2} = 0$ or $\Es{Y^2} = 0$ then $\Es{XY} = 0$. 
+Otherwise define
+$$
+ \hat{X} := \frac{X}{ \sqrt{\Es{X^2}} } \; \mbox{ and } \;
+ \hat{Y} := \frac{Y}{ \sqrt{\Es{Y^2}} }
+$$
+for which $\Es{\hat{X}^2} = \Es{\hat{Y}^2} = 1$.
+The proof follows from the product of two numbers always being less than or
+equal to the average of their squares
+\begin{eqnarray*}
+0 & \le & \Es{ (\hat{X} - \hat{Y})^2 }  \\
+\Es{ \hat{X} \hat{Y} } & \le & \Es{ \frac{ \hat{X}^2 + \hat{Y}^2 }{2} }  \\
+\frac{\Es{XY}}{ \sqrt{\Es{X^2}} \sqrt{\Es{Y^2}} } & \le & \frac{1+1}{2}  \\
+\Es{XY}^2 & \le & \Es{X^2} \Es{Y^2}
+\end{eqnarray*}
+If both sides of the inequality are equal, linear dependence follows since
+either $X = 0$ or $Y = 0$ or
+$$
+\frac{1}{\sqrt{\Es{X}}} X + \frac{1}{\sqrt{\Es{Y}}} Y = \hat{X} - \hat{Y} = 0
+$$
+If $X$ and $Y$ are linearly dependent, either $X = k Y$ or $Y = k X$ for some
+constant $k$, either way both sides of the inequality are equal.
+
+QED
+
+
+## In terms of vectors of a _real_ inner product space
+
+The probabilistic proof can be generalized to any real inner product space as
+shown in [@steele_cauchy-schwarz_2004].
+
+Given any vectors $x, y$ from a real [inner product
+space](https://en.wikipedia.org/wiki/Inner_product_space),
+the Cauchy-Schwarz inequality is
+\begin{equation*}
+\iprod{x}{y} \le \norm{x} \norm{y}
+\end{equation*}
+with equality holding iff $x$ and $y$ are linearly dependent.
+
+**Proof**
+
+If either $\norm{x} = 0$ or $\norm{y} = 0$ then $\iprod{x}{y} = 0$. 
+Otherwise define
+$$
+ \hat{x} := \frac{x}{ \norm{x} } \; \mbox{ and } \;
+ \hat{y} := \frac{y}{ \norm{y} }
+$$
+for which $\norm{\hat{x}} = \norm{\hat{y}} = 1$.
+\begin{eqnarray*}
+0 & \le & \iprod{\hat{x} - \hat{y}}{\hat{x} - \hat{y}}  \\
+2 \iprod{\hat{x}}{\hat{y}} & \le &
+  \iprod{\hat{x}}{\hat{x}} + \iprod{\hat{y}}{\hat{y}}  \\
+2 \; \frac{ \iprod{x}{y} }{ \norm{x} \norm{y} }
+  & \le & 1+1  \\
+\iprod{x}{y} & \le & \norm{x} \norm{y}
+\end{eqnarray*}
+If both sides of the inequality are equal, linear dependence follows since
+either $x = \vec{0}$ or $y = \vec{0}$ or
+$$
+\frac{1}{\norm{x}} x + \frac{1}{\norm{y}} y = \hat{x} - \hat{y} = \vec{0}
+$$
+If $x$ and $y$ are linearly dependent, either $x = \lambda y$ or $y = \lambda
+x$ for some scaler $\lambda$, either way both sides of the inequality are
+equal.
+
+QED
+
+## In terms of vectors of an inner product space
+
+This section consider the Cauchy-Schwarz inequality for vectors of a real or
+complex inner product space.
+
+The proof for real inner produce spaces does not work for complex inner
+product spaces because $\iprod{y}{x} = \overline{\iprod{x}{y}}$ (complex
+conjugate).
+
+The proof is effectively the same as the previous proof for real inner
+product spaces. But the normalized vectors $\hat{x}$ and $\hat{y}$ must be
+"rotated" in the complex plane so that both sides of the inequality remain
+real. This rotation will be done via a multiplier $\alpha$.
+
+**Proof**
+
+Let $\hat{x}$ and $\hat{y}$ be defined as in the proof for real inner product
+spaces. Let
+$$
+\alpha := \sqrt{ \frac{\iprod{\hat{y}}{\hat{x}}}{\abs{\iprod{\hat{x}}{\hat{y}}}} }
+$$
+for which the following convenient properties hold
+$$ \alpha \overline{\alpha} = 1 = \overline{\alpha} \alpha $$
+$$
+\alpha^2 \iprod{\hat{x}}{\hat{y}}
+  = \frac{\iprod{\hat{y}}{\hat{x}}\iprod{\hat{x}}{\hat{y}}}{\abs{\iprod{\hat{x}}{\hat{y}}}}
+  = \frac{\abs{\iprod{\hat{x}}{\hat{y}}}^2}{\abs{\iprod{\hat{x}}{\hat{y}}}}
+  = \abs{\iprod{\hat{x}}{\hat{y}}}
+  = \overline{\alpha}^2 \iprod{\hat{y}}{\hat{x}}
+$$
+
+The proof proceeds like with a real inner product space but using $\alpha$,
+\begin{eqnarray*}
+0 & \le & \iprod{\alpha \hat{x} - \overline{\alpha} \hat{y}}
+                {\alpha \hat{x} - \overline{\alpha} \hat{y}}  \\
+  & = & \alpha \overline{\alpha} \iprod{\hat{x}}{\hat{x}}
+      - \alpha^2 \iprod{\hat{x}}{\hat{y}}
+      - \overline{\alpha}^2 \iprod{\hat{y}}{\hat{x}}
+      + \overline{\alpha} \alpha  \iprod{\hat{y}}{\hat{y}}  \\
+2 \abs{\iprod{\hat{x}}{\hat{y}}} & \le &
+  \iprod{\hat{x}}{\hat{x}} + \iprod{\hat{y}}{\hat{y}}  \\
+2 \; \frac{ \abs{\iprod{x}{y}} }{ \norm{x} \norm{y} }
+  & \le & 1+1  \\
+\abs{\iprod{x}{y}} & \le & \norm{x} \norm{y}
+\end{eqnarray*}
+If both sides of the inequality are equal, linear dependence follows since
+either $x = \vec{0}$ or $y = \vec{0}$ or
+$$
+\frac{\alpha}{\norm{x}} x + \frac{\overline{\alpha}}{\norm{y}} y
+  = \alpha \hat{x} - \overline{\alpha} \hat{y} = \vec{0}
+$$
+If $x$ and $y$ are linearly dependent, either $x = \lambda y$ or $y = \lambda
+x$ for some scaler $\lambda$, either way both sides of the inequality are
+equal.
+
+QED
+
+
+# References
+
+{% endblock answer %}
+
