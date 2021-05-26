@@ -55,7 +55,7 @@ equal to the average of their squares
 If both sides of the inequality are equal, linear dependence follows since
 either $X = 0$ or $Y = 0$ or
 $$
-\frac{1}{\sqrt{\Es{X}}} X + \frac{1}{\sqrt{\Es{Y}}} Y = \hat{X} - \hat{Y} = 0
+\frac{1}{\sqrt{\Es{X^2}}} X + \frac{1}{\sqrt{\Es{Y^2}}} Y = \hat{X} - \hat{Y} = 0
 $$
 If $X$ and $Y$ are linearly dependent, either $X = k Y$ or $Y = k X$ for some
 constant $k$, either way both sides of the inequality are equal.
@@ -106,7 +106,7 @@ QED
 
 ## In terms of vectors of an inner product space
 
-This section consider the Cauchy-Schwarz inequality for vectors of a real or
+This section considers the Cauchy-Schwarz inequality for vectors of a real or
 complex inner product space.
 
 The proof for real inner produce spaces does not work for complex inner
@@ -121,7 +121,8 @@ real. This rotation will be done via a multiplier $\alpha$.
 **Proof**
 
 Let $\hat{x}$ and $\hat{y}$ be defined as in the proof for real inner product
-spaces. Let
+spaces.
+If $\iprod{\hat{x}}{\hat{y}} = 0$ the inequality holds, otherwise let
 $$
 \alpha := \sqrt{ \frac{\iprod{\hat{y}}{\hat{x}}}{\abs{\iprod{\hat{x}}{\hat{y}}}} }
 $$
