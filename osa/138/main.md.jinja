@@ -2,6 +2,23 @@
 {% set aid = 138 %}
 {% set answers_questions = [1035] %}
 {% set title = "Sample vs population variance with Bernoulli distributions" %}
+{% set related_q_urls = {
+  'stats.stackexchange.com': {
+    "/questions/49617/":
+    "Unbiased estimator for variance or Maximum Likelihood Estimator?",
+    "/questions/183006/":
+    "Maximum Likelihood Estimation — why it is used despite being biased in many cases",
+    "/questions/207760/":
+    "When is a biased estimator preferable to unbiased one?"
+  }
+} %}
+
+{% set qid = 1035 %}
+
+{% macro question() %}
+For a Bernoulli distribution, is sample variance
+a better estimator than simply the definition of variance?
+{% endmacro %}
 
 {% block answer %}
 

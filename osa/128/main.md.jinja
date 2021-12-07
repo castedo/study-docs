@@ -1,6 +1,5 @@
 {% extends 'osa/_answer.md.jinja' %}
 {% set aid = 128 %}
-{% set answers_questions = [ 1025 ] %}
 {% set title = "Scoped Entropy" %}
 
 {% block answer %}
@@ -128,6 +127,17 @@ $$
                = \H{X|\{\Omega\}} - \H{X|X} = \H{X}
 $$
 
+
+## Benefit of scoped entropy over variance
+
+A feature analogous to mutual information is the following:
+
+For any random variable $X$ and random object $Y$ of finitely many values,
+$$
+\begin{array}{lcr}
+\W{\mathfrak{d}(X)}{Y} = 0 & \text{ if and only if } & \mbox{ $X$ and $Y$ are independent}
+\end{array}
+$$
 
 
 # References
