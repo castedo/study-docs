@@ -1,0 +1,68 @@
+{% extends '_doc.md.jinja' %}
+{% set docid = 150 %}
+{% set title = "The population genetic interpretation of Shannon entropy" %}
+
+{% block markdown %}
+{{shared_latex()}}
+
+>
+> # _WORK IN PROGRESS_
+>
+
+# Introduction
+
+An early application of Shannon entropy [@shannon_mathematical_1998] in
+population genetics is the famous article "The Apportionment of Human
+Diversity" by Lewontin in 1972 [@lewontin_1972].
+Shannon entropy is a measure of information, expressed in units of bits (base 2
+logarithm of probability).
+Ideas of genetic information being stored and quantified in bits appears in the
+context of evolutionary genetics as early as 1961 [@kimura_natural_1961].
+
+There are claims that Shannon entropy lacks a natural genetic interpretation:
+
+> "The Shannon information measure used by Lewontin (1972) has many convenient
+> properties from a numerical point of view, but is extremely difficult to
+> interpret genetically." [@latter_genetic_1980]
+
+or that genetic information lacks a natural interpretation as communication
+measured by Shannon entropy:
+
+> "Geneticists are not so fortunate. For them, the analogy to communication
+> theory is less obvious.  Efforts to make this analogy explicit seem forced at
+> best, ..." [@bergstrom_transmission_2011]
+
+The goal of this document is to describe a natural interpretation which is both
+genetic and a clear example of communication measured by Shannon entropy.
+
+
+# The Interpretation
+
+The underlying basic interpretation is:
+
+> The amount of information transmitted by a gamete in the reproduction of a
+> population.
+
+In the specific application of the 1972 Lewontin article [@lewontin_1972],
+the interpretation is:
+
+> The amount of information transmitted by a gamete, **at a random locus,** in
+> the reproduction of a population.
+
+---
+
+
+# Telegraph Illustration
+
+For the following question posed by Bergstrom &amp; Rosvall:
+
+> "Is there a clean mapping from informational processes in biology onto the
+> telegraph schema?" [@bergstrom_response_2011]
+
+TODO: an answer for the biological subfield of population genetics
+
+
+# References
+
+{% endblock markdown %}
+
