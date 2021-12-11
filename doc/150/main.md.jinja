@@ -1,6 +1,6 @@
 {% extends '_doc.md.jinja' %}
 {% set docid = 150 %}
-{% set title = "The population genetic interpretation of Shannon entropy" %}
+{% set title = "Gametic entropy of populations" %}
 
 {% block markdown %}
 {{shared_latex()}}
@@ -19,26 +19,29 @@ logarithm of probability).
 Ideas of genetic information being stored and quantified in bits appears in the
 context of evolutionary genetics as early as 1961 [@kimura_natural_1961].
 
-There are claims that Shannon entropy lacks a natural genetic interpretation:
+BDH Latter described the genetic interpretation of Shannon entropy as extremely
+difficult:
 
 > "The Shannon information measure used by Lewontin (1972) has many convenient
 > properties from a numerical point of view, but is extremely difficult to
 > interpret genetically." [@latter_genetic_1980]
 
-or that genetic information lacks a natural interpretation as communication
-measured by Shannon entropy:
+CT Bergstrom CT &amp; M Rosvall, inversly, described genetic information as
+lacking an obvious interpretation as communication measured by Shannon entropy:
 
 > "Geneticists are not so fortunate. For them, the analogy to communication
 > theory is less obvious.  Efforts to make this analogy explicit seem forced at
 > best, ..." [@bergstrom_transmission_2011]
 
-The goal of this document is to describe a natural interpretation which is both
-genetic and a clear example of communication measured by Shannon entropy.
+This document proposes a natural interpretation called the gametic entropy of
+populations.
+The goal of this document is to show it is a natural interpretation which is
+both clearly genetic and communication measured by Shannon entropy.
 
 
 # The Interpretation
 
-The underlying basic interpretation is:
+The **gametic entropy of a population** is:
 
 > The amount of information transmitted by a gamete in the reproduction of a
 > population.
@@ -49,10 +52,71 @@ the interpretation is:
 > The amount of information transmitted by a gamete, **at a random locus,** in
 > the reproduction of a population.
 
----
+or equivalently: "a population's gametic entropy **per random locus**".
+
+An interpretation for sexually reproducing populations will be discussed first.
+Clonal populations will be discussed later as a degenerate special case.
+
+In the process of reproduction, populations pass genetic information from
+one generation to the next. Half of this information is passed from fathers
+to offspring. The critical role of sperm is clearly to transmit a message
+of genetic information.
+The gonads of fathers are clearly the sender of a message:
+the genetic information stored in, and transmitted by, a gamete.
+The receiver of this message is an unfertilized egg. This transmission channel
+starts at the end of meioses and ends at fertilization.
+
+Isolating the transmission channel of genetic information from mothers to
+offspring involved a bit of abstraction. In the case of sexually reproducing
+species, the ovum is performing two tasks which can be separated artificially.
+One function is the transmission of genetic information that
+mirrors sperm. The other function is providing the initial cell which contains
+the required biological machinery to divide and grow upon fertilization (a
+cellular role).
+This fertilization being, at its core, is the receipt
+of a message of genetic information, stored in and transmitted by, a gamete
+sent from the father's gonads.
+
+In the case of "three parent" IVF this decoupling of the transmission vs
+cellular roles of the ovum is achieved.
+There are two "mothers". One "mother" provides
+nuclear DNA which serves the female version of sperm's communication function.
+The other "mother" is an egg donor which provides the remaining function
+of an ovum in nature. There is a detail of mitochondrial DNA, which technically
+will come from the egg donor. But the overall conceptual framework still holds
+despite this detail of mitochondrial DNA.
+
+So in summary, the senders of gametic information is from the gonads of
+parents. In both maternal and paternal transmission, it starts from meiosis and
+ends at fertilization. The genetic message is carried by a gamete from a
+parental gonads to an unfertilized egg.
 
 
-# Telegraph Illustration
+## Distribution of possible gametic messages
+
+In the context of an entire population, genetic information is
+transmitted from one generation to the next. The channel of this information
+is "successful transmissions" by gametes from meiosis to fertilization
+(and only those transmissions).
+
+The calculation of Shannon entropy depends on the probability distribution of
+all possible messages of genetic information over the gametic channel.
+Given a reproducing population at a fixed point in time, there is the next
+possible fertilizing gamete transmission according to a probabilistic
+distribution given the population at that instant in time.
+
+
+## Decoupling of matter from information
+
+TODO
+
+
+## Interplanetary IVF 
+
+TODO
+
+
+## Telegraph Illustration
 
 For the following question posed by Bergstrom &amp; Rosvall:
 
@@ -60,6 +124,18 @@ For the following question posed by Bergstrom &amp; Rosvall:
 > telegraph schema?" [@bergstrom_response_2011]
 
 TODO: an answer for the biological subfield of population genetics
+
+
+# Toy examples
+
+TODO
+
+
+
+# Degenerate Case of Clonal Populations
+
+TODO
+
 
 
 # References
