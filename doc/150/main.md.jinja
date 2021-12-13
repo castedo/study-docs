@@ -16,25 +16,26 @@ population genetics is the famous article "The Apportionment of Human
 Diversity" by Lewontin in 1972 [@lewontin_1972].
 Shannon entropy is a measure of information, expressed in units of _bits_ (base 2
 logarithm of probability).
-Ideas of genetic information being stored and quantified in bits appears in the
-context of evolutionary genetics as early as 1961 [@kimura_natural_1961].
+The idea of genetic information being stored and quantified in bits appears in
+the context of evolutionary genetics as early as 1961 [@kimura_natural_1961].
 
 Eight years after Lewontin's article, BDH Latter wrote:
 
 > "The Shannon information measure used by Lewontin (1972) ... is extremely
 > difficult to interpret genetically." [@latter_genetic_1980]
 
-Inversely, CT Bergstrom &amp; M Rosvall, have written that genetic information
+Inversely, CT Bergstrom &amp; M Rosvall have written that genetic information
 lacks an obvious interpretation as communication measured by Shannon entropy:
 
 > "Geneticists are not so fortunate. For them, the analogy to communication
 > theory is less obvious.  Efforts to make this analogy explicit seem forced at
 > best, ..." [@bergstrom_transmission_2011]
 
-This document defines and justifies an interpretation called the gametic
-entropy of a population.
-The goal of this document is to make this an easy interpretation for population
-geneticists and an obvious example of communication measured by Shannon entropy.
+This document explains an interpretation and names it the _gametic
+entropy of a population_.
+The goal of this document is to provide population geneticists an easy
+interpretation and obvious example of communication measured by Shannon
+entropy.
 
 
 # The Interpretation
@@ -59,49 +60,49 @@ Only sexually reproducing populations are discussed initially.
 Clonal populations will be discussed later as a degenerate special case.
 
 
-## Messages, senders, receivers and channels
+## Messages, senders, and receivers
 
-Shannon entropy comes out of the mathematical theory of communication
-[@shannon_mathematical_1998] which is the basis of information theory.
-Entropy measures the degree of uncertainty for what message will pass
-through a channel of communication from sender to receiver.
-Entropy measures a real tangible minimum requirement on the channel capacity
-required to communicate messages. This minimum requirement applies to
-all real channel mechanism, no matter what the physical mechanism.
-
-A key insight from this theory is the decoupling of information transmission
-from physical implementations of channels. The measure of entropy captures
-something about communication independent of physical matter and applies
-universally no matter the physical situation (with the possible exception of
-quantum mechanical situations).
-
-Clearly life on earth has developed many physical mechanisms for communication.
-In the context of population genetics, it's natural to ask whether there is
-some fundamental information communicated orthogonal of particular material
-biological mechanisms of life on earth.
+Shannon entropy is the key measurement of information theory
+[@shannon_mathematical_1998].
+Entropy measures the degree of uncertainty for what message a sender
+will communicate to a receiver.
+Entropy measures a real tangible minimum capacity required of any channel
+or storage used to communicate those messages.
+This minimum requirement applies to
+all channel and storage mechanisms, no matter the physical mechanism.
+In population genetics, a key process of interest is the propagation of
+populations. In this process, what are the messages, senders and receivers?
 
 
-## The paternal gametic channel
+## Gametic messages
 
-Fathers have the curious biological role of passing genetic information to
-offspring without any significant material contribution.
-The bare minimum requirement for fathers is to contribute sperm.
-The essential role of sperm is the genetic information that it carries.
-The material properties of sperm are little more than it's capacity
-to transmit genetic information. In short, the gametes of fathers
-are a channel mechanism to carry a message of half the genetic information
-needed by offspring.
+The propagation of a population requires new members to be born. For
+sexually reproducing species, a new birth requires genetic information to be
+passed down from a mother and a father in the population.
+Each half of this genetic information is stored and transmitted by a gamete.
+It is at the unit of a gamete that we clearly see a complete message,
+sent by each of the two parents to new offspring, the receiver.
 
-We can now evaluate the gametic entropy of the fathers in a population.
-At given instant in time, for all the potential fathers in a population,
-there is a probabilistic distribution of possible genetic messages carried
-by the next sperm to succeed at fertilization. The Shannon entropy of this
-distribution is the paternal gametic entropy of a population.
+For a next possible birth of a population,
+there is a probabilistic distribution of possible genetic messages carried by
+each gamete.
+The Shannon entropy of the distribution of possible messages is the gametic
+entropy of the population.
+
+When only looking at the entropy of autosomal genetic information,
+the distinction between maternal and paternal does not matter,
+but when considering the information in sex chromosomes,
+the gametic entropy can be specifically maternal or paternal.
+The unqualified gametic entropy is a per gamete entropy and thus the average of
+both maternal and paternal gametic entropies, since every birth requires one of
+each kind of gametic message.
 
 
-## Interplanetary IVF
+# Interplanetary IVF (in vitro fertilization)
 
-Reflecting on DNA sequencing technology and artificial synthesis of an entire
+Reflecting on DNA sequencing technology, maternal spindle transfer in
+"three-parent" IVF [@amato_three-parent_2014] [@zhang_live_2017]
+and artificial synthesis of an entire
 (baterial) genome [@gibson_creation_2010], it is not hard to imagine a
 possibility of completely dematerialized transmission of the genetic
 information carried by gametes.
@@ -116,98 +117,60 @@ We now can propose an answer to the following question posed by CT Bergstrom
 
 The practical utility of such telegraphy, if any, is hard to imagine today.
 But as an entertaining mind experiment in science fiction, we can image the
-utility of interplanetary transmission of the genetic information in donor gametes.
-Rather than physically transporting sperm between planets, which could take
+utility of interplanetary transmission of the genetic information in donor gametes for IVF.
+Rather than physically transporting gametes between planets, which could take
 months to years, the pure data can be transmitted in minutes or hours.
 
-The paternal gametic entropy of a population, would be the bare minimum channel
-capacity, measures in bits, required to transmit the genetic information of a
-random gamete donor knowing only that the donor is any possible individual
+The maternal/paternal gametic entropy of a population, would be the bare
+minimum channel capacity, measures in bits, required to transmit the genetic
+information of a random egg/sperm donor knowing only that the donor is any
+possible mother/father in the population.
+
+
+# Simple illustrations
+
+Roughly speaking, entropy is the best possible "score" in a game of "20
+questions". That is the minimum number of yes/no questions that can be asked to
+determine a hidden answer.
+One bit is the quantity of information gained, equivalently the amount of
+uncertainty reduced, by one yes/no question about two equally likely
+possibilities.
+One can think of gametic entropy as the number of yes/no questions offspring
+need to ask per parent to find out what alleles they are to inherit:
+"Hey parent, do I get an Rh+ or an Rh- allele from you?"
+
+
+## Pure Unicorns
+
+We consider a simple example of a sexually reproducing population with the
+lowest possible gametic entropy. This population consists of "pure unicorns"
+which are all genetically identical except for males and females having XY and XX
+chromosomes, respectively. The maternal gametic entropy is zero because there
+is no uncertainty about what genetic information is communicated.
+But the paternal gametic entropy is 1 bit since there is equal chance of an X or a Y chromosome being communicated.
+Thus the gametic entropy of the pure unicorn population is $0.5$,
+the average of the parent-specific entropies.
+
+
+## Linkage Disequilibrium
+
+We now consider a impure unicorn population with an Rh gene and a
+pigmentation gene. We assume that both genes have two equally likely
+alleles.
+If these two genes are autosomal and not linked then the gametic entropy of
+the population will be $2.5$.
+If these two genes are completely linked then the gametic entropy of
+the population will be $1.5$.
+
+
+# Degenerate case of clonal populations
+
+In the case of asexually reproducing clonal populations, there is no
+distinction between the genetic information in a gamete vs a parent.  The
+"gametic message" is simply the entire genome of a parent, which is sent in its
+entirety to its single-parent offspring. The gametic entropy of a clonal
+population is the same as the entropy of the distribution of distinct genomes
 in the population.
-
-
-## Gross anatomy
-
-At the resolution of gross anatomy, we can identify the sender and receiver
-of the genetic message carried by a sperm. The sender is a testicle and the
-receiver an oviduct (Fallopian tube in humans).
-At this coarse resolution, the maternal parallel is clear.
-The sender is an ovary and the receiver an oviduct. In both cases the sender
-is a gonad and receiver an oviduct.
-
-At cell biology level, we can identify the start of the gametic channel as the
-end of meiosis. In the paternal case, the end of the channel is fertilization.
-But in the maternal case, the situation is more subtle and requires
-some abstraction.
-But before directly addressing this,
-we review one of the interesting developments in vitro fertilization (IVF)
-in recent years.
-
-
-## "Three-parent" IVF
-
-From a clinical perspective, "three-parent" IVF is _mitochondrial replacement
-therapy_ [@amato_three-parent_2014].
-But from the perspective of this document, mitochondrial DNA is not the
-interesting phenomenon to note. For illustrative purpose we exclude
-mitochondria as not part of the human population, similar to our microbiome, we
-can treat mitochondria as a non-human organism in a symbiotic relationship with
-our bodies.
-
-Of particular interest here is the maternal spindle transfer form of
-three-parent IVF, first performed in 2016 [@zhang_live_2017].
-There is an artificial decoupling of the transmission vs cellular roles of the
-ovum, because there are two ovums filling these two distinct roles.
-The "third parent" is the egg donor whose ovum will have its genetic
-information removed and only the cellular function of the ovum is used (note
-the mitochondrial DNA is being ignored in this illustration).
-This cellular function provides the required biological machinery to divide and
-grow upon fertilization.
-The genetic mother provides an ovum but during the spindle transfer, genetic
-information form the genetic mother is transferred to the egg donor's ovum.
-It is the egg donor's ovum with genetic information replaced that will be
-fertilized.
-
-
-## Two gametic channels
-
-The transmission function of a genetic mother's gamete in three-parent IVF
-is the maternal equivalent of sperm.
-So in summary, the senders of gametic information is from the gonads of
-parents. In both maternal and paternal transmission, it starts from meiosis.
-In the paternal case the channel ends at fertilization.
-In an artificial maternal case, this channel ends when spindle transfer
-into a donor egg is complete.
-In the natural maternal case, it is arguable also fertilization when
-the gametic channels ends. But nature blurs the distinct since the
-unfertilized ovum to "receive" the message is also the gamete transmitting
-the message.
-
-
-## Distribution of possible gametic messages
-
-In the context of an entire population, genetic information is
-transmitted from one generation to the next. The channel of this information
-is "successful transmissions" by gametes from meiosis to fertilization
-(and only those transmissions).
-
-The calculation of Shannon entropy depends on the probability distribution of
-all possible messages of genetic information over paternal and maternal gametic
-channels, in equal proportion.
-Given a reproducing population at a fixed point in time, there is the next
-possible fertilizing gamete transmission according to a probabilistic
-distribution given the population at that instant in time.
-
-
-# Toy examples
-
-TODO
-
-
-
-# Degenerate Case of Clonal Populations
-
-TODO
 
 
 
