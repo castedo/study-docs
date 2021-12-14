@@ -64,12 +64,19 @@ Clonal populations will be discussed later as a degenerate special case.
 
 Shannon entropy is the key measurement of information theory
 [@shannon_mathematical_1998].
-Entropy measures the degree of uncertainty for what message a sender
-will communicate to a receiver.
+Entropy measures the degree of uncertainty on what messages a sender
+communicates to a receiver.
 Entropy measures a real tangible minimum capacity required of any channel
 or storage used to communicate those messages.
 This minimum requirement applies to
 all channel and storage mechanisms, no matter the physical mechanism.
+
+Roughly speaking, entropy is the best possible "score" in a game of "20
+questions". That is the minimum number of yes/no questions that can be asked to
+determine a yet to be known message.
+One bit is the quantity of information gained (uncertainty reduced) by one
+yes/no question about two equally likely possibilities.
+
 In population genetics, a key process of interest is the propagation of
 populations. In this process, what are the messages, senders and receivers?
 
@@ -88,6 +95,9 @@ there is a probabilistic distribution of possible genetic messages carried by
 each gamete.
 The Shannon entropy of the distribution of possible messages is the gametic
 entropy of the population.
+One can roughly think of gametic entropy as the number of yes/no questions
+offspring need to ask per parent to find out what alleles they are to inherit:
+"Hey parent, do I get an Rh+ or an Rh- allele from you?"
 
 When only looking at the entropy of autosomal genetic information,
 the distinction between maternal and paternal does not matter,
@@ -96,6 +106,30 @@ the gametic entropy can be specifically maternal or paternal.
 The unqualified gametic entropy is a per gamete entropy and thus the average of
 both maternal and paternal gametic entropies, since every birth requires one of
 each kind of gametic message.
+
+
+# Simple illustrations
+
+### Pure Unicorns
+
+We consider a simple example of a sexually reproducing population with the
+lowest possible gametic entropy. This population consists of "pure unicorns"
+which are all genetically identical except for males and females having XY and XX
+chromosomes, respectively. The maternal gametic entropy is zero because there
+is no uncertainty about what genetic information is communicated.
+But the paternal gametic entropy is 1 bit since there is equal chance of an X or a Y chromosome being communicated.
+Thus the gametic entropy of the pure unicorn population is $0.5$,
+the average of the parent-specific entropies.
+
+### Linkage Disequilibrium
+
+We now consider a impure unicorn population with an Rh gene and a
+pigmentation gene. We assume that both genes have two equally likely
+alleles.
+If these two genes are autosomal and not linked then the gametic entropy of
+the population will be $2.5$.
+If these two genes are completely linked then the gametic entropy of
+the population will be $1.5$.
 
 
 # Interplanetary IVF (in vitro fertilization)
@@ -120,47 +154,11 @@ But as an entertaining mind experiment in science fiction, we can image the
 utility of interplanetary transmission of the genetic information in donor gametes for IVF.
 Rather than physically transporting gametes between planets, which could take
 months to years, the pure data can be transmitted in minutes or hours.
-
-The maternal/paternal gametic entropy of a population, would be the bare
-minimum channel capacity, measures in bits, required to transmit the genetic
-information of a random egg/sperm donor knowing only that the donor is any
-possible mother/father in the population.
-
-
-# Simple illustrations
-
-Roughly speaking, entropy is the best possible "score" in a game of "20
-questions". That is the minimum number of yes/no questions that can be asked to
-determine a hidden answer.
-One bit is the quantity of information gained, equivalently the amount of
-uncertainty reduced, by one yes/no question about two equally likely
-possibilities.
-One can think of gametic entropy as the number of yes/no questions offspring
-need to ask per parent to find out what alleles they are to inherit:
-"Hey parent, do I get an Rh+ or an Rh- allele from you?"
-
-
-## Pure Unicorns
-
-We consider a simple example of a sexually reproducing population with the
-lowest possible gametic entropy. This population consists of "pure unicorns"
-which are all genetically identical except for males and females having XY and XX
-chromosomes, respectively. The maternal gametic entropy is zero because there
-is no uncertainty about what genetic information is communicated.
-But the paternal gametic entropy is 1 bit since there is equal chance of an X or a Y chromosome being communicated.
-Thus the gametic entropy of the pure unicorn population is $0.5$,
-the average of the parent-specific entropies.
-
-
-## Linkage Disequilibrium
-
-We now consider a impure unicorn population with an Rh gene and a
-pigmentation gene. We assume that both genes have two equally likely
-alleles.
-If these two genes are autosomal and not linked then the gametic entropy of
-the population will be $2.5$.
-If these two genes are completely linked then the gametic entropy of
-the population will be $1.5$.
+All of the facts about transmission rates in telegraphy apply in a hypothetical
+interplanetary IVF system.
+For a given population of equally likely possible donors, the maternal
+(paternal) gametic entropy, is the best possible rate, measures in bits, for
+transmitting the genetic information of a egg (sperm) donor.
 
 
 # Degenerate case of clonal populations
